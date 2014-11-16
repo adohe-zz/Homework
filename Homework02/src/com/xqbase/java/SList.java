@@ -114,13 +114,15 @@ public class SList {
 
     public void squish() {
         // Fill in your solution here.  (Ours is eleven lines long.)
-        SListNode p = head;
-        SListNode q = head;
+        SListNode p = head, q = head;
 
-        while (q.next != null) {
+        while (q != null && q.next != null) {
             q = q.next;
-            if (p.item.equals(q.item))
+            if (q.item.equals(p.item)) {
+                size --;
+                p.next = q.next;
                 continue;
+            }
             p.next = q;
             p = q;
         }
@@ -139,6 +141,14 @@ public class SList {
 
     public void twin() {
         // Fill in your solution here.  (Ours is seven lines long.)
+        SListNode node = head;
+
+        while (node != null) {
+            SListNode newNode = new SListNode(node.item, node.next);
+            node.next = newNode;
+            size ++;
+            node = newNode.next;
+        }
     }
 
     /**
@@ -173,6 +183,8 @@ public class SList {
         testEmpty();
         testAfterInsertFront();
         testAfterInsertEnd();
+        testAfterTwin();
+        testAfterSquish();
     }
 
 
@@ -269,5 +281,58 @@ public class SList {
                 + lst1.toString());
         TestHelper.verify(lst1.toString().equals("[  5  6  7  ]"),
                 "insertFront after insertEnd failed");
+    }
+
+    private static void testAfterTwin() {
+        SList lst1 = new SList();
+        lst1.insertEnd(new Integer(3));
+        lst1.insertEnd(new Integer(7));
+        lst1.insertEnd(new Integer(4));
+        lst1.insertEnd(new Integer(2));
+        lst1.insertEnd(new Integer(2));
+        System.out.println();
+        System.out.println("Here is a list after insertEnd 3, 7, 4, 2, 2: "
+                + lst1.toString());
+        System.out.println("length() should be 5. It is: " + lst1.length());
+        TestHelper.verify(lst1.length() == 5, "length() after insertEnd failed");
+        lst1.twin();
+        System.out.println("Here is the same list after twin(): "
+                + lst1.toString());
+        System.out.println("length() should be 10. It is: "
+                + lst1.length());
+        TestHelper.verify(lst1.length() == 10,
+                "length() after twin failed");
+        TestHelper.verify(lst1.toString().equals("[  3  3  7  7  4  4  2  2  2  2  ]"),
+                "twin() failed");
+    }
+
+    private static void testAfterSquish() {
+        SList lst1 = new SList();
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(1));
+        lst1.insertEnd(new Integer(1));
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(0));
+        lst1.insertEnd(new Integer(3));
+        lst1.insertEnd(new Integer(3));
+        lst1.insertEnd(new Integer(3));
+        lst1.insertEnd(new Integer(1));
+        lst1.insertEnd(new Integer(1));
+        lst1.insertEnd(new Integer(0));
+        System.out.println();
+        System.out.println("Here is the list after insertEnd 0, 0, 0, 0, 1, 1, 0, 0, 0, 3, 3, 3, 1, 1, 0: "
+                + lst1.toString());
+        System.out.println("length() should be 15. It is: " + lst1.length());
+        TestHelper.verify(lst1.length() == 15, "length() after insertEnd failed");
+        lst1.squish();
+        System.out.println("Here is the same list after squish(): "
+                + lst1.toString());
+        System.out.println("length() should be 6. It is :" + lst1.length());
+        TestHelper.verify(lst1.length() == 6, "length() after squish() failed");
+        TestHelper.verify(lst1.toString().equals("[  0  1  0  3  1  0  ]"), "squish() failed");
     }
 }

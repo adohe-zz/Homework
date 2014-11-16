@@ -23,15 +23,17 @@ public class Homework {
     public static void smoosh(int[] ints) {
         // Fill in your solution here.  (Ours is twelve lines long, not counting
         // blank lines or lines already present in this file.)
-        int[] diff = new int[ints.length - 1];
-        for (int i = 0; i < diff.length; i++) {
-            diff[i] = ints[i + 1] - ints[i];
-        }
-        for (int i = 0; i < diff.length; i++) {
-            if (diff[i] == 0)
-                ints[i + 1] = -1;
-        }
+        int i = 0, p = 0;
+        for (int j = 0; j < ints.length; j++) {
+            if (ints[j] == ints[p])
+                continue;
 
+            ints[++i] = ints[j];
+            p = j;
+        }
+        while ( ++i < ints.length) {
+            ints[i] = -1;
+        }
     }
 
     /**
@@ -107,7 +109,7 @@ public class Homework {
         result = list5.toString();
         System.out.println(result);
         TestHelper.verify(result.equals("[  3  7  4  5  2  0  8  5  ]"),
-                "BAD SQUISH!!!  No biscuit.");
+                "BAD SQUISH ONE!!!  No biscuit.");
 
         int[] test6 = {6, 6, 6, 6, 6, 3, 6, 3, 6, 3, 3, 3, 3, 3, 3};
         SList list6 = new SList();
@@ -119,7 +121,7 @@ public class Homework {
         result = list6.toString();
         System.out.println(result);
         TestHelper.verify(result.equals("[  6  3  6  3  6  3  ]"),
-                "BAD SQUISH!!!  No biscuit.");
+                "BAD SQUISH TWO!!!  No biscuit.");
 
         int[] test7 = {4, 4, 4, 4, 4};
         SList list7 = new SList();
@@ -131,7 +133,7 @@ public class Homework {
         result = list7.toString();
         System.out.println(result);
         TestHelper.verify(result.equals("[  4  ]"),
-                "BAD SQUISH!!!  No biscuit.");
+                "BAD SQUISH THREE!!!  No biscuit.");
 
         int[] test8 = {0, 1, 2, 3, 4, 5, 6};
         SList list8 = new SList();
