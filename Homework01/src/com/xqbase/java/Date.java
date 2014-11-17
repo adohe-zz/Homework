@@ -106,8 +106,8 @@ class Date {
      *  @return a String representation of this date.
      */
     public String toString() {
-        StringBuilder sb = new StringBuilder(month);
-        sb.append("/")
+        StringBuilder sb = new StringBuilder();
+        sb.append(month).append("/")
                 .append(day)
                 .append("/")
                 .append(year);
@@ -118,14 +118,30 @@ class Date {
      *  @return true if and only if this Date is before d.
      */
     public boolean isBefore(Date d) {
-        return (this.year <= d.year) && (this.month <= d.month) && (this.day < d.day);
+        if (this.year < d.year) {
+            return true;
+        } else if (this.year == d.year && this.month < d.month) {
+            return true;
+        } else if (this.year == d.year && this.month == d.month && this.day < d.day) {
+            return true;
+        }
+
+        return false;
     }
 
     /** Determines whether this Date is after the Date d.
      *  @return true if and only if this Date is after d.
      */
     public boolean isAfter(Date d) {
-        return (this.year >= d.year) && (this.month >= d.month) && (this.day > d.day);
+        if (this.year > d.year) {
+            return true;
+        } else if (this.year == d.year && this.month > d.month) {
+            return true;
+        } else if (this.year == d.year && this.month == d.month && this.day > d.day) {
+            return true;
+        }
+
+        return false;
     }
 
     /** Returns the number of this Date in the year.
@@ -156,13 +172,15 @@ class Date {
             negative = true;
             before = this;
             after = d;
-        } else {
+        } else if (this.isAfter(d)) {
             before = d;
             after = this;
+        } else {
+            return 0;
         }
 
         int difference = 0;
-        for (int i = before.year; i < after.year; i++) {
+        for (int i = before.year + 1; i < after.year; i++) {
             difference += daysInYear(i);
         }
 
@@ -204,7 +222,14 @@ class Date {
         Date d4 = new Date("2/27/1977");
         Date d5 = new Date("8/31/2110");
 
-    /* I recommend you write code to test the isLeapYear function! */
+        /* I recommend you write code to test the isLeapYear function! */
+        System.out.println("\nTesting isLeapYear.");
+        System.out.println("1996 is leap year should be true: " +
+                isLeapYear(1996));
+        System.out.println("1800 is leap year should be false: " +
+                isLeapYear(1800));
+        System.out.println("2000 is leap year should be true: " +
+                isLeapYear(2000));
 
         System.out.println("\nTesting before and after.");
         System.out.println(d2 + " after " + d1 + " should be true: " +
