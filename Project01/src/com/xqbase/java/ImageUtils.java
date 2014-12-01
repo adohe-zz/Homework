@@ -112,7 +112,7 @@ public class ImageUtils {
 
     /**
      *  writeTIFF() writes a BufferedImage to a specified file in TIFF format.
-     *  @param rle the input BufferedImage.
+     *  @param image the input BufferedImage.
      *  @param filename the output filename.
      */
     private static void writeTIFF(BufferedImage image, String filename) {
@@ -207,6 +207,6 @@ public class ImageUtils {
     }
 
     public static short getBlue(int rgb) {
-        return (short)(rgb & RED_MASK);
+        return (short)(rgb & BLUE_MASK);
     }
 }

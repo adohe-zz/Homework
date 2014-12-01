@@ -27,6 +27,12 @@ public class DListNode {
         this.next = next;
     }
 
+    public DListNode(Run run) {
+        this.run = run;
+        this.prev = null;
+        this.next = null;
+    }
+
     public Run getRun() {
         return run;
     }
@@ -49,5 +55,10 @@ public class DListNode {
 
     public void setNext(DListNode next) {
         this.next = next;
+    }
+
+    @Override
+    public String toString() {
+        return "{Frequency: " + run.getFrequency() + "," + "RGB: " + run.getRgb() + "}";
     }
 }

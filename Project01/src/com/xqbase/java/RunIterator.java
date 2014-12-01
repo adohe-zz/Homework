@@ -92,20 +92,18 @@ public class RunIterator implements Iterator {
      *  for the sole purpose of returning four ints.
      */
     public int[] next() {
-        // Construct a new array of 4 ints, fill in its values, and return it.
-        // Don't forget to advance the RunIterator's pointer so that the next
-        // call to next() will return the subsequent run.
-
         int[] results = new int[4];
-        Run currRun = currNode.getNext().getRun();
-        int rgb = currRun.getRgb();
-        int frequency = currRun.getFrequency();
+        DListNode nextNode = currNode.getNext();
+        Run run = nextNode.getRun();
+        int rgb = run.getRgb();
+        int frequency = run.getFrequency();
 
         results[0] = frequency;
         results[1] = ImageUtils.getRed(rgb);
         results[2] = ImageUtils.getGreen(rgb);
         results[3] = ImageUtils.getBlue(rgb);
 
+        currNode = nextNode;
         return results;
     }
 

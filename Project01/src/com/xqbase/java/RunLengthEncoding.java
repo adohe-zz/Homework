@@ -160,8 +160,16 @@ public class RunLengthEncoding implements Iterable {
      *  @return a String representation of this RunLengthEncoding.
      */
     public String toString() {
-        // Replace the following line with your solution.
-        return "";
+        RunIterator iterator = iterator();
+        StringBuilder sb = new StringBuilder();
+        while (iterator.hasNext()) {
+            int[] run = iterator.next();
+            sb.append("Frequency: ").append(run[0]).append(",")
+                    .append("RGB:{").append(run[1]).append(",").append(run[2])
+                    .append(",").append(run[3]).append("}").append("-->");
+        }
+
+        return sb.toString();
     }
 
 
@@ -192,13 +200,15 @@ public class RunLengthEncoding implements Iterable {
                     DListNode back = list.back();
                     if (back.getRun().getRgb() == rgb) {
                         // update the back node
-                        list.updateBack();
+                        DListNode node = new DListNode(new Run(rgb, back.getRun().getFrequency() + 1), back.getPrev(), null);
+                        back.getPrev().setNext(node);
                     } else {
                         list.insertBack(new Run(rgb, 1));
                     }
                 }
             }
         }
+
         check();
     }
 
@@ -208,21 +218,25 @@ public class RunLengthEncoding implements Iterable {
      *  all run lengths does not equal the number of pixels in the image.
      */
     public void check() {
+        System.out.println(this);
         int sum = 0;
         DListNode node = list.front();
 
-        while (node != null && node.getNext() != null) {
-            int frequency = node.getRun().getFrequency();
+        while (node != null) {
+            Run currRun = node.getRun();
+            DListNode next = node.getNext();
+            int frequency = currRun.getFrequency();
             if (frequency < 1) {
                 System.err.println("Frequency is less than 1");
                 System.exit(0);
             }
-            DListNode next = node.getNext();
-            if (node.getRun().getRgb() == next.getRun().getRgb()) {
+            if (next != null && (node.getRun().getRgb() == next.getRun().getRgb())) {
                 System.err.println("Two consecutive runs have the same RGB intensities");
                 System.exit(0);
             }
             sum += frequency;
+
+            node = node.getNext();
         }
 
         if (sum != this.width * this.height) {
@@ -259,7 +273,7 @@ public class RunLengthEncoding implements Iterable {
         while (node != null) {
             Run run = node.getRun();
             index += run.getFrequency();
-            if (index >= loc)
+            if (index > loc)
                 break;
 
             node = node.getNext();
@@ -267,6 +281,7 @@ public class RunLengthEncoding implements Iterable {
 
         Run currRun = node.getRun();
         int currRgb = currRun.getRgb();
+        int currFrequency = currRun.getFrequency();
         int newRGB = ImageUtils.rgb(red, green, blue);
         if (currRgb != newRGB) {
             // need to update the doubly-liked list
@@ -277,9 +292,16 @@ public class RunLengthEncoding implements Iterable {
             } else {
                 if (next.getRun().getRgb() == newRGB) {
                     // merge
+                    list.insertAfter(new Run(newRGB, next.getRun().getFrequency() + 1), node);
                 } else {
                     list.insertAfter(new Run(newRGB, 1), node);
                 }
+            }
+            currFrequency --;
+            node.getRun().setFrequency(currFrequency);
+            if (currFrequency == 0) {
+                // remove this node
+                list.remove(node);
             }
         }
 
@@ -363,7 +385,7 @@ public class RunLengthEncoding implements Iterable {
 
         System.out.println("Testing one-parameter RunLengthEncoding constuctor " +
                 "on a 3x3 image.  Input image:");
-        System.out.print(image1);
+        System.out.println(image1);
         RunLengthEncoding rle1 = new RunLengthEncoding(image1);
         rle1.check();
         System.out.println("Testing getWidth/getHeight on a 3x3 encoding.");
@@ -378,11 +400,6 @@ public class RunLengthEncoding implements Iterable {
         setAndCheckRLE(rle1, 0, 0, 42);
         image1.setPixel(0, 0, (short) 42, (short) 42, (short) 42);
         doTest(rle1.toPixImage().equals(image1),
-           /*
-                       array2PixImage(new int[][] { { 42, 3, 6 },
-                                                    { 1, 4, 7 },
-                                                    { 2, 5, 8 } })),
-           */
                 "Setting RLE1[0][0] = 42 fails.");
 
         System.out.println("Testing setPixel() on a 3x3 encoding.");
@@ -391,7 +408,7 @@ public class RunLengthEncoding implements Iterable {
         doTest(rle1.toPixImage().equals(image1),
                 "Setting RLE1[1][0] = 42 fails.");
 
-        System.out.println("Testing setPixel() on a 3x3 encoding.");
+        /*System.out.println("Testing setPixel() on a 3x3 encoding.");
         setAndCheckRLE(rle1, 0, 1, 2);
         image1.setPixel(0, 1, (short) 2, (short) 2, (short) 2);
         doTest(rle1.toPixImage().equals(image1),
@@ -419,10 +436,10 @@ public class RunLengthEncoding implements Iterable {
         setAndCheckRLE(rle1, 1, 2, 42);
         image1.setPixel(1, 2, (short) 42, (short) 42, (short) 42);
         doTest(rle1.toPixImage().equals(image1),
-                "Setting RLE1[1][2] = 42 fails.");
+                "Setting RLE1[1][2] = 42 fails.");*/
 
 
-        PixImage image2 = array2PixImage(new int[][] { { 2, 3, 5 },
+        /*PixImage image2 = array2PixImage(new int[][] { { 2, 3, 5 },
                 { 2, 4, 5 },
                 { 3, 4, 6 } });
 
@@ -523,6 +540,6 @@ public class RunLengthEncoding implements Iterable {
         setAndCheckRLE(rle4, 1, 0, 1);
         image4.setPixel(1, 0, (short) 1, (short) 1, (short) 1);
         doTest(rle4.toPixImage().equals(image4),
-                "Setting RLE4[1][0] = 1 fails.");
+                "Setting RLE4[1][0] = 1 fails.");*/
     }
 }

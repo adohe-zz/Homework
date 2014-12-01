@@ -38,13 +38,15 @@ public class DList {
      *  @param run is the item to be inserted.
      */
     public void insertFront(Run run) {
-        if (head == null) {
-            head = new DListNode(run, null, null);
-            tail = head;
+        DListNode newNode = new DListNode(run);
+        if (isEmpty()) {
+            tail = newNode;
         } else {
-            head = new DListNode(run, null, head);
+            head.setPrev(newNode);
+            newNode.setNext(head);
         }
-        
+
+        head = newNode;
         size ++;
     }
 
@@ -53,13 +55,15 @@ public class DList {
      *  @param run is the item to be inserted.
      */
     public void insertBack(Run run) {
-        if (head == null) {
-            head = new DListNode(run, null, null);
-            tail = head;
+        DListNode newNode = new DListNode(run);
+        if (isEmpty()) {
+            head = newNode;
         } else {
-            tail = new DListNode(run, tail, null);
+            tail.setNext(newNode);
+            newNode.setPrev(tail);
         }
 
+        tail = newNode;
         size ++;
     }
 
@@ -128,9 +132,15 @@ public class DList {
             return;
 
         // Create a new node instance
-        DListNode newNode = createNode(run, node, node.getNext());
-        if (node.getNext() == null)
+        DListNode newNode = new DListNode(run);
+        if (node == tail) {
+            newNode.setNext(null);
             tail = newNode;
+        } else {
+            newNode.setNext(node.getNext());
+            node.getNext().setPrev(newNode);
+        }
+        newNode.setPrev(node);
         node.setNext(newNode);
         size ++;
     }
@@ -161,32 +171,26 @@ public class DList {
         if (node == null)
             return;
 
-        if (node.getPrev() == null) {
+        if (node == head) {
             head = node.getNext();
-        } else if(node.getNext() == null) {
-            tail = node.getPrev();
         } else {
             node.getPrev().setNext(node.getNext());
         }
-        size --;
-    }
 
-    /***
-     * Helper function for RunLengthEncoding to update the frequency
-     */
-    public void updateBack() {
-        if (tail != null) {
-            int f = tail.getRun().getFrequency() + 1;
-            tail.getRun().setFrequency(f);
+        if (node == tail) {
+            tail = node.getPrev();
+        } else {
+            node.getNext().setPrev(node.getPrev());
         }
+        size --;
     }
 
     @Override
     public String toString() {
         String result = "[  ";
         DListNode node = head;
-        while (node != tail.getNext()) {
-            result = result + node.getRun() + " ";
+        while (node != null) {
+            result += node;
             node = node.getNext();
         }
 
