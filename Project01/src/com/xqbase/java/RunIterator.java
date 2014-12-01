@@ -38,9 +38,7 @@ public class RunIterator implements Iterator {
      *  Define any variables associated with a RunIterator object here.
      *  These variables MUST be private.
      */
-    private Run currRun;
-    private int currRunIndex = -1;
-    private int maxRunIndex = -2;
+    private DListNode currNode;
 
     /**
      *  RunIterator() constructs a new iterator starting with a specified run.
@@ -55,9 +53,8 @@ public class RunIterator implements Iterator {
     // constructor that you want so that your RunLengthEncoding.iterator()
     // implementation can construct a RunIterator that points to the first run of
     // the encoding.
-    RunIterator(int maxRunLength) {
-        this.maxRunIndex = maxRunLength;
-        this.currRun = null;
+    RunIterator(DListNode node) {
+        this.currNode = node;
     }
 
     /**
@@ -67,7 +64,7 @@ public class RunIterator implements Iterator {
      *  @return true if the iterator has more elements.
      */
     public boolean hasNext() {
-        if (currRunIndex < maxRunIndex)
+        if (currNode.getNext() != null)
             return true;
 
         return false;
@@ -99,8 +96,17 @@ public class RunIterator implements Iterator {
         // Don't forget to advance the RunIterator's pointer so that the next
         // call to next() will return the subsequent run.
 
-        // Replace the following line with your solution.
-        return new int[4];
+        int[] results = new int[4];
+        Run currRun = currNode.getNext().getRun();
+        int rgb = currRun.getRgb();
+        int frequency = currRun.getFrequency();
+
+        results[0] = frequency;
+        results[1] = ImageUtils.getRed(rgb);
+        results[2] = ImageUtils.getGreen(rgb);
+        results[3] = ImageUtils.getBlue(rgb);
+
+        return results;
     }
 
     /**

@@ -40,6 +40,11 @@ import javax.swing.JLabel;
  */
 public class ImageUtils {
 
+    private static final int RED_MASK   = 0x00ff0000;
+    private static final int GREEN_MASK = 0x0000ff00;
+    private static final int BLUE_MASK  = 0x000000ff;
+
+
     /**
      *  buffer2PixImage() converts a BufferedImage to a PixImage.
      *  @param bImage the image to convert.
@@ -185,5 +190,23 @@ public class ImageUtils {
      */
     public static void displayTIFF(PixImage image) {
         displayTIFFs(new PixImage[] { image });
+    }
+
+    public static int rgb(short red, short green, short blue) {
+        int k = red;
+        k = k << 16;
+        return k | green << 8 | blue;
+    }
+
+    public static short getRed(int rgb) {
+        return (short)((rgb & RED_MASK) >> 16);
+    }
+
+    public static short getGreen(int rgb) {
+        return (short)((rgb & GREEN_MASK) >> 8);
+    }
+
+    public static short getBlue(int rgb) {
+        return (short)(rgb & RED_MASK);
     }
 }

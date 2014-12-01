@@ -171,6 +171,16 @@ public class DList {
         size --;
     }
 
+    /***
+     * Helper function for RunLengthEncoding to update the frequency
+     */
+    public void updateBack() {
+        if (tail != null) {
+            int f = tail.getRun().getFrequency() + 1;
+            tail.getRun().setFrequency(f);
+        }
+    }
+
     @Override
     public String toString() {
         String result = "[  ";

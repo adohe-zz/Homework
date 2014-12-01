@@ -92,8 +92,7 @@ public class RunLengthEncoding implements Iterable {
      */
 
     public int getWidth() {
-        // Replace the following line with your solution.
-        return 1;
+        return this.width;
     }
 
     /**
@@ -103,8 +102,7 @@ public class RunLengthEncoding implements Iterable {
      *  @return the height of the image that this run-length encoding represents.
      */
     public int getHeight() {
-        // Replace the following line with your solution.
-        return 1;
+        return this.height;
     }
 
     /**
@@ -115,10 +113,7 @@ public class RunLengthEncoding implements Iterable {
      *  RunLengthEncoding.
      */
     public RunIterator iterator() {
-        // Replace the following line with your solution.
-        return null;
-        // You'll want to construct a new RunIterator, but first you'll need to
-        // write a constructor in the RunIterator class.
+        return new RunIterator(new DListNode(null, null, list.front()));
     }
 
     /**
@@ -128,8 +123,31 @@ public class RunLengthEncoding implements Iterable {
      *  @return the PixImage that this RunLengthEncoding encodes.
      */
     public PixImage toPixImage() {
-        // Replace the following line with your solution.
-        return new PixImage(1, 1);
+        PixImage image = new PixImage(this.width, this.height);
+
+        RunIterator iterator = iterator();
+        int x = 0;
+        int y = 0;
+        int index = 0;
+        while (iterator.hasNext()) {
+            int[] run = iterator.next();
+            for (int i = 0; i < run[0]; i++) {
+                x = getX(index);
+                y = getY(index);
+                image.setPixel(x, y, (short)run[1], (short)run[2], (short)run[3]);
+                index ++;
+            }
+        }
+
+        return image;
+    }
+
+    private int getX(int index) {
+        return index % this.width;
+    }
+
+    private int getY(int index) {
+        return index / this.width;
     }
 
     /**
@@ -161,10 +179,26 @@ public class RunLengthEncoding implements Iterable {
      *  @param image is the PixImage to run-length encode.
      */
     public RunLengthEncoding(PixImage image) {
-        // Your solution here, but you should probably leave the following line
-        // at the end.
         this.width = image.getWidth();
         this.height = image.getHeight();
+
+        for (int j = 0; j < this.height; j++) {
+            for (int i = 0; i < this.width; i++) {
+
+                int rgb = ImageUtils.rgb(image.getRed(i, j), image.getGreen(i, j), image.getBlue(i, j));
+                if (list.isEmpty()) {
+                    list.insertBack(new Run(rgb, 1));
+                } else {
+                    DListNode back = list.back();
+                    if (back.getRun().getRgb() == rgb) {
+                        // update the back node
+                        list.updateBack();
+                    } else {
+                        list.insertBack(new Run(rgb, 1));
+                    }
+                }
+            }
+        }
         check();
     }
 
@@ -174,7 +208,27 @@ public class RunLengthEncoding implements Iterable {
      *  all run lengths does not equal the number of pixels in the image.
      */
     public void check() {
-        // Your solution here.
+        int sum = 0;
+        DListNode node = list.front();
+
+        while (node != null && node.getNext() != null) {
+            int frequency = node.getRun().getFrequency();
+            if (frequency < 1) {
+                System.err.println("Frequency is less than 1");
+                System.exit(0);
+            }
+            DListNode next = node.getNext();
+            if (node.getRun().getRgb() == next.getRun().getRgb()) {
+                System.err.println("Two consecutive runs have the same RGB intensities");
+                System.exit(0);
+            }
+            sum += frequency;
+        }
+
+        if (sum != this.width * this.height) {
+            System.err.println("The sum of all run lengths does not equal the number of pixels in the image");
+            System.exit(0);
+        }
     }
 
 
@@ -196,8 +250,40 @@ public class RunLengthEncoding implements Iterable {
      *  @param blue the new blue intensity to store at coordinate (x, y).
      */
     public void setPixel(int x, int y, short red, short green, short blue) {
-        // Your solution here, but you should probably leave the following line
-        //   at the end.
+        // first find the loc of the pixel
+        int loc = x + y * this.width;
+        int index = 0;
+
+        // find the right node within the list
+        DListNode node = list.front();
+        while (node != null) {
+            Run run = node.getRun();
+            index += run.getFrequency();
+            if (index >= loc)
+                break;
+
+            node = node.getNext();
+        }
+
+        Run currRun = node.getRun();
+        int currRgb = currRun.getRgb();
+        int newRGB = ImageUtils.rgb(red, green, blue);
+        if (currRgb != newRGB) {
+            // need to update the doubly-liked list
+            DListNode next = node.getNext();
+            if (next == null) {
+                // update the current node
+                list.insertBack(new Run(newRGB, 1));
+            } else {
+                if (next.getRun().getRgb() == newRGB) {
+                    // merge
+                } else {
+                    list.insertAfter(new Run(newRGB, 1), node);
+                }
+            }
+        }
+
+
         check();
     }
 
