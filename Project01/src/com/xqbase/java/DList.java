@@ -14,20 +14,15 @@ public class DList {
     // List fields
     private DListNode head;
     private DListNode tail;
-    private int size;
 
     public DList() {
         head = tail = null;
-        size = 0;
     }
 
     public boolean isEmpty() {
-        return this.size == 0;
+        return this.head == null;
     }
 
-    public int getLength() {
-        return this.size;
-    }
 
     protected DListNode createNode(Run run, DListNode prev, DListNode next) {
         return new DListNode(run, prev, next);
@@ -47,7 +42,6 @@ public class DList {
         }
 
         head = newNode;
-        size ++;
     }
 
     /**
@@ -64,7 +58,6 @@ public class DList {
         }
 
         tail = newNode;
-        size ++;
     }
 
     /**
@@ -142,7 +135,6 @@ public class DList {
         }
         newNode.setPrev(node);
         node.setNext(newNode);
-        size ++;
     }
 
     /**
@@ -157,11 +149,16 @@ public class DList {
         }
 
         // Create a new node instance
-        DListNode newNode = createNode(run, node.getPrev(), node);
-        if (node.getPrev() == null)
+        DListNode newNode = new DListNode(run);
+        if (node == head) {
+            newNode.setPrev(null);
             head = newNode;
+        } else {
+            newNode.setPrev(node.getPrev());
+            node.getPrev().setNext(newNode);
+        }
+        newNode.setNext(node);
         node.setPrev(newNode);
-        size ++;
     }
 
     /**
@@ -182,7 +179,6 @@ public class DList {
         } else {
             node.getNext().setPrev(node.getPrev());
         }
-        size --;
     }
 
     @Override
