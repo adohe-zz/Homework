@@ -10,27 +10,11 @@ package com.xqbase.java;
  */
 public class Run {
 
-    private int rgb;
-    private int frequency;
+    public int rgb;
+    public int frequency;
 
     public Run(int rgb, int frequency) {
         this.rgb = rgb;
-        this.frequency = frequency;
-    }
-
-    public int getRgb() {
-        return rgb;
-    }
-
-    public void setRgb(int rgb) {
-        this.rgb = rgb;
-    }
-
-    public int getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 

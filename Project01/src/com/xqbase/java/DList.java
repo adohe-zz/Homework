@@ -23,11 +23,6 @@ public class DList {
         return this.head == null;
     }
 
-
-    protected DListNode createNode(Run run, DListNode prev, DListNode next) {
-        return new DListNode(run, prev, next);
-    }
-
     /**
      *  insertFront() inserts an item at the front of this DList.
      *  @param run is the item to be inserted.
@@ -37,8 +32,8 @@ public class DList {
         if (isEmpty()) {
             tail = newNode;
         } else {
-            head.setPrev(newNode);
-            newNode.setNext(head);
+            head.prev = newNode;
+            newNode.next = head;
         }
 
         head = newNode;
@@ -53,8 +48,8 @@ public class DList {
         if (isEmpty()) {
             head = newNode;
         } else {
-            tail.setNext(newNode);
-            newNode.setPrev(tail);
+            tail.next = newNode;
+            newNode.prev = tail;
         }
 
         tail = newNode;
@@ -87,34 +82,6 @@ public class DList {
     }
 
     /**
-     *  next() returns the node following "node" in this DList.  If "node" is
-     *  null, or "node" is the last node in this DList, return null.
-     *
-     *  @param node the node whose successor is sought.
-     *  @return the node following "node".
-     */
-    public DListNode next(DListNode node) {
-        if (node == null)
-            return null;
-
-        return node.getNext();
-    }
-
-    /**
-     *  prev() returns the node prior to "node" in this DList.  If "node" is
-     *  null, or "node" is the first node in this DList, return null.
-     *
-     *  @param node the node whose predecessor is sought.
-     *  @return the node prior to "node".
-     */
-    public DListNode prev(DListNode node) {
-        if (node == null)
-            return null;
-
-        return node.getPrev();
-    }
-
-    /**
      *  insertAfter() inserts an item in this DList immediately following "node".
      *  If "node" is null, do nothing.
      *  @param run the item to be inserted.
@@ -127,14 +94,14 @@ public class DList {
         // Create a new node instance
         DListNode newNode = new DListNode(run);
         if (node == tail) {
-            newNode.setNext(null);
+            newNode.next = null;
             tail = newNode;
         } else {
-            newNode.setNext(node.getNext());
-            node.getNext().setPrev(newNode);
+            newNode.next = node.next;
+            node.next.prev = newNode;
         }
-        newNode.setPrev(node);
-        node.setNext(newNode);
+        newNode.prev = node;
+        node.next = newNode;
     }
 
     /**
@@ -151,14 +118,14 @@ public class DList {
         // Create a new node instance
         DListNode newNode = new DListNode(run);
         if (node == head) {
-            newNode.setPrev(null);
+            newNode.prev = null;
             head = newNode;
         } else {
-            newNode.setPrev(node.getPrev());
-            node.getPrev().setNext(newNode);
+            newNode.prev = node.prev;
+            node.prev.next = newNode;
         }
-        newNode.setNext(node);
-        node.setPrev(newNode);
+        newNode.next = node;
+        node.prev = newNode;
     }
 
     /**
@@ -169,15 +136,15 @@ public class DList {
             return;
 
         if (node == head) {
-            head = node.getNext();
+            head = node.next;
         } else {
-            node.getPrev().setNext(node.getNext());
+            node.prev.next = node.next;
         }
 
         if (node == tail) {
-            tail = node.getPrev();
+            tail = node.prev;
         } else {
-            node.getNext().setPrev(node.getPrev());
+            node.next.prev = node.prev;
         }
     }
 
@@ -187,7 +154,7 @@ public class DList {
         DListNode node = head;
         while (node != null) {
             result += node;
-            node = node.getNext();
+            node = node.next;
         }
 
         return result + "]";

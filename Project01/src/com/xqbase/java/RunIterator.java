@@ -64,7 +64,7 @@ public class RunIterator implements Iterator {
      *  @return true if the iterator has more elements.
      */
     public boolean hasNext() {
-        if (currNode.getNext() != null)
+        if (currNode.next != null)
             return true;
 
         return false;
@@ -93,10 +93,10 @@ public class RunIterator implements Iterator {
      */
     public int[] next() {
         int[] results = new int[4];
-        DListNode nextNode = currNode.getNext();
-        Run run = nextNode.getRun();
-        int rgb = run.getRgb();
-        int frequency = run.getFrequency();
+        DListNode nextNode = currNode.next;
+        Run run = nextNode.run;
+        int rgb = run.rgb;
+        int frequency = run.frequency;
 
         results[0] = frequency;
         results[1] = ImageUtils.getRed(rgb);

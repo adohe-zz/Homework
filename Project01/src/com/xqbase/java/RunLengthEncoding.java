@@ -198,9 +198,9 @@ public class RunLengthEncoding implements Iterable {
                     list.insertBack(new Run(rgb, 1));
                 } else {
                     DListNode back = list.back();
-                    if (back.getRun().getRgb() == rgb) {
+                    if (back.run.rgb == rgb) {
                         // update the back node
-                        list.insertBefore(new Run(rgb, back.getRun().getFrequency() + 1), back);
+                        list.insertBefore(new Run(rgb, back.run.frequency + 1), back);
                         list.remove(back);
                     } else {
                         list.insertBack(new Run(rgb, 1));
@@ -223,18 +223,18 @@ public class RunLengthEncoding implements Iterable {
         DListNode node = list.front();
 
         while (node != null) {
-            Run currRun = node.getRun();
-            DListNode next = node.getNext();
-            int frequency = currRun.getFrequency();
+            Run currRun = node.run;
+            DListNode next = node.next;
+            int frequency = currRun.frequency;
             if (frequency < 1) {
                 System.err.println("Frequency is less than 1");
             }
-            if (next != null && (node.getRun().getRgb() == next.getRun().getRgb())) {
+            if (next != null && (node.run.rgb == next.run.rgb)) {
                 System.err.println("Two consecutive runs have the same RGB intensities");
             }
             sum += frequency;
 
-            node = node.getNext();
+            node = node.next;
         }
 
         if (sum != this.width * this.height) {
@@ -268,59 +268,59 @@ public class RunLengthEncoding implements Iterable {
         // find the right node within the list
         DListNode node = list.front();
         while (node != null) {
-            Run run = node.getRun();
-            total += run.getFrequency();
+            Run run = node.run;
+            total += run.frequency;
             if (total > loc)
                 break;
 
-            node = node.getNext();
+            node = node.next;
         }
 
-        Run currRun = node.getRun();
-        int currRgb = currRun.getRgb();
-        int currFrequency = currRun.getFrequency();
+        Run currRun = node.run;
+        int currRgb = currRun.rgb;
+        int currFrequency = currRun.frequency;
         int newRGB = ImageUtils.rgb(red, green, blue);
         if (currRgb != newRGB) {
             // need to update the doubly-liked list
             if (currFrequency == 1) {
-                DListNode prev = node.getPrev();
-                DListNode next = node.getNext();
+                DListNode prev = node.prev;
+                DListNode next = node.next;
 
                 if (prev == null && next == null) {
                     // by default impossible
                 } else if (prev == null) {
-                    Run nextRun = next.getRun();
-                    if (newRGB == nextRun.getRgb()) {
-                        list.insertAfter(new Run(newRGB, nextRun.getFrequency() + 1), node);
+                    Run nextRun = next.run;
+                    if (newRGB == nextRun.rgb) {
+                        list.insertAfter(new Run(newRGB, nextRun.frequency + 1), node);
                         list.remove(next);
                     } else {
                         list.insertAfter(new Run(newRGB, 1), node);
                     }
                     list.remove(node);
                 } else if (next == null) {
-                    Run prevRun = prev.getRun();
-                    if (newRGB == prevRun.getRgb()) {
-                        list.insertBefore(new Run(newRGB, prevRun.getFrequency() + 1), node);
+                    Run prevRun = prev.run;
+                    if (newRGB == prevRun.rgb) {
+                        list.insertBefore(new Run(newRGB, prevRun.frequency + 1), node);
                         list.remove(prev);
                     } else {
                         list.insertBefore(new Run(newRGB, 1), node);
                     }
                     list.remove(node);
                 } else {
-                    Run prevRun = prev.getRun();
-                    Run nextRun = next.getRun();
+                    Run prevRun = prev.run;
+                    Run nextRun = next.run;
 
-                    if (prevRun.getRgb() == newRGB && nextRun.getRgb() == newRGB) {
-                        list.insertBefore(new Run(newRGB, prevRun.getFrequency() + nextRun.getFrequency() + 1), prev);
+                    if (prevRun.rgb == newRGB && nextRun.rgb == newRGB) {
+                        list.insertBefore(new Run(newRGB, prevRun.frequency + nextRun.frequency + 1), prev);
                         list.remove(prev);
                         list.remove(node);
                         list.remove(next);
-                    } else if (prevRun.getRgb() == newRGB) {
-                        list.insertBefore(new Run(newRGB, prevRun.getFrequency() + 1), prev);
+                    } else if (prevRun.rgb == newRGB) {
+                        list.insertBefore(new Run(newRGB, prevRun.frequency + 1), prev);
                         list.remove(prev);
                         list.remove(node);
-                    } else if (nextRun.getRgb() == newRGB) {
-                        list.insertAfter(new Run(newRGB, nextRun.getFrequency() + 1), next);
+                    } else if (nextRun.rgb == newRGB) {
+                        list.insertAfter(new Run(newRGB, nextRun.frequency + 1), next);
                         list.remove(node);
                         list.remove(next);
                     } else {
@@ -331,40 +331,40 @@ public class RunLengthEncoding implements Iterable {
             } else {
                 if (total - currFrequency == loc) {
                     // the pixel is at the run head
-                    DListNode prev = node.getPrev();
+                    DListNode prev = node.prev;
                     if (prev == null) {
                         // update the list head
                         list.insertFront(new Run(newRGB, 1));
                     } else {
-                        if (prev.getRun().getRgb() == newRGB) {
+                        if (prev.run.rgb == newRGB) {
                             // merge with prev
                             list.remove(prev);
-                            list.insertBefore(new Run(newRGB, prev.getRun().getFrequency() + 1), node);
+                            list.insertBefore(new Run(newRGB, prev.run.frequency + 1), node);
                         } else {
                             list.insertBefore(new Run(newRGB, 1), node);
                         }
                     }
                     int frequency = currFrequency - 1;
-                    node.getRun().setFrequency(frequency);
+                    node.run.frequency = frequency;
                     if (frequency == 0)
                         list.remove(node);
                 } else if (total - 1 == loc && currFrequency != 1) {
                     // the pixel is at the run tail
-                    DListNode next = node.getNext();
+                    DListNode next = node.next;
                     if (next == null) {
                         // update the list tail
                         list.insertBack(new Run(newRGB, 1));
                     } else {
-                        if (next.getRun().getRgb() == newRGB) {
+                        if (next.run.rgb == newRGB) {
                             // merge with the next
-                            list.remove(node.getNext());
-                            list.insertAfter(new Run(newRGB, next.getRun().getFrequency() + 1), node);
+                            list.remove(node.next);
+                            list.insertAfter(new Run(newRGB, next.run.frequency + 1), node);
                         } else {
                             list.insertAfter(new Run(newRGB, 1), node);
                         }
                     }
                     int frequency = currFrequency - 1;
-                    node.getRun().setFrequency(frequency);
+                    node.run.frequency = frequency;
                     if (frequency == 0)
                         list.remove(node);
                 } else {
@@ -375,7 +375,7 @@ public class RunLengthEncoding implements Iterable {
                     list.insertBefore(new Run(currRgb, i), node);
                     list.insertAfter(new Run(currRgb, j), node);
                     list.remove(node);
-                    DListNode prev = node.getPrev();
+                    DListNode prev = node.prev;
                     list.insertAfter(new Run(newRGB, 1), prev);
                 }
             }
