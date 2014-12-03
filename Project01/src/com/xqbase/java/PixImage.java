@@ -329,14 +329,8 @@ public class PixImage {
                 int xLoc = x + i - offset;
                 int yLoc = y + j - offset;
 
-                if (xLoc < 0)
-                    xLoc = 0;
-                if (yLoc < 0)
-                    yLoc = 0;
-                if (yLoc == img.height)
-                    yLoc = img.height - 1;
-                if (xLoc == img.width)
-                    xLoc = img.width - 1;
+                xLoc = constraint(xLoc, 0, img.width - 1);
+                yLoc = constraint(yLoc, 0, img.height - 1);
 
                 short red = img.getRed(xLoc, yLoc);
                 short green = img.getGreen(xLoc, yLoc);
@@ -353,6 +347,10 @@ public class PixImage {
 
         return (long)(Math.pow(gxRed, 2) + Math.pow(gyRed, 2) + Math.pow(gxGreen, 2) + Math.pow(gyGreen, 2)
                 + Math.pow(gxBlue, 2) + Math.pow(gyBlue, 2));
+    }
+
+    private int constraint(int n, int low, int high) {
+        return n < low ? low : (n > high) ? high : n;
     }
 
     /**
