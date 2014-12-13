@@ -1,12 +1,18 @@
 package com.xqbase.java;
 
+import com.xqbase.java.list.DList;
+import com.xqbase.java.list.InvalidNodeException;
+import com.xqbase.java.list.List;
+import com.xqbase.java.list.ListNode;
+
 /**
  *  A Set is a collection of Comparable elements stored in sorted order.
  *  Duplicate elements are not permitted in a Set.
  **/
 public class Set {
-  /* Fill in the data fields here. */
-
+    /* Fill in the data fields here. */
+    private List list;
+    private int size;
     /**
      * Set ADT invariants:
      *  1)  The Set's elements must be precisely the elements of the List.
@@ -21,7 +27,8 @@ public class Set {
      *  Performance:  runs in O(1) time.
      **/
     public Set() {
-        // Your solution here.
+        list = new DList();
+        size = 0;
     }
 
     /**
@@ -30,8 +37,7 @@ public class Set {
      *  Performance:  runs in O(1) time.
      **/
     public int cardinality() {
-        // Replace the following line with your solution.
-        return 0;
+        return size;
     }
 
     /**
@@ -43,7 +49,18 @@ public class Set {
      *  Performance:  runs in O(this.cardinality()) time.
      **/
     public void insert(Comparable c) {
-        // Your solution here.
+        ListNode head = list.front();
+        do {
+            try {
+                if (c.compareTo(head.item()) < 0) {
+                    head.insertBefore(c);
+                } else if (c.compareTo(head.item()) >= 0) {
+                    head = head.next();
+                }
+            } catch (InvalidNodeException e) {
+                e.printStackTrace();
+            }
+        } while (head.isValidNode());
     }
 
     /**
@@ -62,7 +79,32 @@ public class Set {
      *  DO NOT ATTEMPT TO COPY ELEMENTS; just copy _references_ to them.
      **/
     public void union(Set s) {
-        // Your solution here.
+        ListNode sHead = s.list.front();
+        ListNode head = list.front();
+        while (head.isValidNode() && sHead.isValidNode()) {
+            try {
+                if (((Comparable) head.item()).compareTo(sHead) < 0) {
+                    head = head.next();
+                } else if (((Comparable) head.item()).compareTo(sHead) == 0) {
+                    sHead = sHead.next();
+                    head = head.next();
+                } else {
+                    head.insertBefore(sHead.item());
+                    sHead = sHead.next();
+                }
+            } catch (InvalidNodeException e) {
+                e.printStackTrace();
+            }
+        }
+
+        while (sHead.isValidNode()) {
+            try {
+                head.insertAfter(sHead.item());
+                sHead = sHead.next();
+            } catch (InvalidNodeException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -79,7 +121,33 @@ public class Set {
      *  DO NOT ATTEMPT TO COPY ELEMENTS.
      **/
     public void intersect(Set s) {
-        // Your solution here.
+        ListNode sHead = s.list.front();
+        ListNode head = list.front();
+
+        while (head.isValidNode() && sHead.isValidNode()) {
+            try {
+                if (((Comparable) head.item()).compareTo(sHead.item()) < 0) {
+                    ListNode next = head.next();
+                    head.remove();
+                    head = next;
+                } else if (((Comparable) head.item()).compareTo(sHead.item()) == 0) {
+                    head = head.next();
+                    sHead = sHead.next();
+                } else {
+                    sHead = sHead.next();
+                }
+            } catch (InvalidNodeException e) {
+                e.printStackTrace();
+            }
+        }
+
+        while (head.isValidNode()) {
+            try {
+                head.remove();
+            } catch (InvalidNodeException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
