@@ -10,7 +10,7 @@ import com.xqbase.java.list.ListNode;
  *  Duplicate elements are not permitted in a Set.
  **/
 public class Set {
-    /* Fill in the data fields here. */
+
     private List list;
     private int size;
     /**
@@ -49,18 +49,33 @@ public class Set {
      *  Performance:  runs in O(this.cardinality()) time.
      **/
     public void insert(Comparable c) {
-        ListNode head = list.front();
-        do {
+        if (list.isEmpty()) {
+            list.insertFront(c);
+            size ++;
+        } else {
+            ListNode n = list.front();
             try {
-                if (c.compareTo(head.item()) < 0) {
-                    head.insertBefore(c);
-                } else if (c.compareTo(head.item()) >= 0) {
-                    head = head.next();
+                for (; n.isValidNode(); n = n.next()) {
+                    int r = c.compareTo(n.item());
+                    if (r == 0) {
+                        return;
+                    }
+                    if (r < 0) {
+                        if (!n.prev().isValidNode() || (n.prev().isValidNode() && c.compareTo(n.prev().item()) != 0)) {
+                            n.insertBefore(c);
+                            size ++;
+                            break;
+                        }
+                    }
+                }
+                if (!n.isValidNode()) {
+                    list.insertBack(c);
+                    size ++;
                 }
             } catch (InvalidNodeException e) {
-                e.printStackTrace();
+                System.out.println("set contains invalid node!!!");
             }
-        } while (head.isValidNode());
+        }
     }
 
     /**
@@ -83,26 +98,28 @@ public class Set {
         ListNode head = list.front();
         while (head.isValidNode() && sHead.isValidNode()) {
             try {
-                if (((Comparable) head.item()).compareTo(sHead) < 0) {
+                if (((Comparable) head.item()).compareTo(sHead.item()) < 0) {
                     head = head.next();
-                } else if (((Comparable) head.item()).compareTo(sHead) == 0) {
+                } else if (((Comparable) head.item()).compareTo(sHead.item()) == 0) {
                     sHead = sHead.next();
                     head = head.next();
                 } else {
                     head.insertBefore(sHead.item());
+                    size ++;
                     sHead = sHead.next();
                 }
             } catch (InvalidNodeException e) {
-                e.printStackTrace();
+                System.out.println("union should not contains invalid node!!!");
             }
         }
 
         while (sHead.isValidNode()) {
             try {
-                head.insertAfter(sHead.item());
+                list.insertBack(sHead.item());
+                size ++;
                 sHead = sHead.next();
             } catch (InvalidNodeException e) {
-                e.printStackTrace();
+                System.out.println("union should not contains invalid node!!!");
             }
         }
     }
@@ -130,6 +147,7 @@ public class Set {
                     ListNode next = head.next();
                     head.remove();
                     head = next;
+                    size --;
                 } else if (((Comparable) head.item()).compareTo(sHead.item()) == 0) {
                     head = head.next();
                     sHead = sHead.next();
@@ -137,15 +155,18 @@ public class Set {
                     sHead = sHead.next();
                 }
             } catch (InvalidNodeException e) {
-                e.printStackTrace();
+                System.out.println("intersect contains invalid node!!!");
             }
         }
 
         while (head.isValidNode()) {
             try {
+                ListNode node = head.next();
                 head.remove();
+                head = node;
+                size --;
             } catch (InvalidNodeException e) {
-                e.printStackTrace();
+                System.out.println("intersect contains invalid node!!!");
             }
         }
     }
@@ -167,7 +188,7 @@ public class Set {
      **/
     public String toString() {
         // Replace the following line with your solution.
-        return "";
+        return list.toString();
     }
 
     public static void main(String[] argv) {
@@ -192,10 +213,135 @@ public class Set {
         s.union(s2);
         System.out.println("After s.union(s2), s = " + s);
 
+        testUnion();
+
         s.intersect(s3);
         System.out.println("After s.intersect(s3), s = " + s);
 
         System.out.println("s.cardinality() = " + s.cardinality());
-        // You may want to add more (ungraded) test code here.
+
+        testIntersect();
+    }
+
+    private static void testUnion() {
+        Set s = new Set();
+        s.insert(new Integer(3));
+        s.insert(new Integer(4));
+        s.insert(new Integer(6));
+        s.insert(new Integer(7));
+        System.out.println("Set s = " + s);
+
+        Set s1 = new Set();
+        s1.insert(new Integer(3));
+        s1.insert(new Integer(4));
+        s1.insert(new Integer(6));
+        s1.insert(new Integer(7));
+
+        s.union(s1);
+        System.out.println("After s.union(s1), s = " + s);
+
+        Set s2 = new Set();
+        s2.insert(new Integer(1));
+        s2.insert(new Integer(2));
+        s2.insert(new Integer(4));
+
+        s.union(s2);
+        System.out.println("After s.union(s2), s = " + s);
+
+        Set s3 = new Set();
+        s3.insert(new Integer(5));
+        s3.insert(new Integer(7));
+        s3.insert(new Integer(9));
+
+        s.union(s3);
+        System.out.println("After s.union(s3), s = " + s);
+
+        Set s4 = new Set();
+        s4.insert(new Integer(4));
+        s4.insert(new Integer(5));
+
+        s.union(s4);
+        System.out.println("After s.union(s4), s = " + s);
+
+        Set s5 = new Set();
+        s5.insert(new Integer(1));
+        s5.insert(new Integer(2));
+        s5.insert(new Integer(3));
+        s5.insert(new Integer(4));
+        s5.insert(new Integer(5));
+        s5.insert(new Integer(6));
+        s5.insert(new Integer(7));
+        s5.insert(new Integer(8));
+        s5.insert(new Integer(9));
+
+        s.union(s5);
+        System.out.println("After s.union(s5), s = " + s);
+    }
+
+    private static void testIntersect() {
+        Set s = new Set();
+        s.insert(new Integer(5));
+        s.insert(new Integer(6));
+        s.insert(new Integer(7));
+        s.insert(new Integer(4));
+        s.insert(new Integer(1));
+
+        System.out.println("s = " + s);
+
+        Set s1 = new Set();
+        s1.insert(new Integer(1));
+        s1.insert(new Integer(2));
+        s1.insert(new Integer(3));
+        s1.insert(new Integer(4));
+        s1.insert(new Integer(5));
+        s1.insert(new Integer(6));
+        s1.insert(new Integer(7));
+        s1.insert(new Integer(8));
+        s1.insert(new Integer(9));
+
+        s.intersect(s1);
+        System.out.println("After s.intersect(s1), s = " + s);
+        System.out.println("s.cardinality() = " + s.cardinality());
+
+        Set s2 = new Set();
+        s2.insert(new Integer(2));
+        s2.insert(new Integer(4));
+        s2.insert(new Integer(6));
+        s2.insert(new Integer(5));
+        s2.insert(new Integer(10));
+
+        s.intersect(s2);
+        System.out.println("After s.intersect(s2), s = " + s);
+        System.out.println("s.cardinality() = " + s.cardinality());
+
+        Set s3 = new Set();
+        s3.insert(new Integer(2));
+        s3.insert(new Integer(1));
+        s3.insert(new Integer(3));
+        s3.insert(new Integer(4));
+        s3.insert(new Integer(6));
+
+        s.intersect(s3);
+        System.out.println("After s.intersect(s3), s = " + s);
+        System.out.println("s.cardinality() = " + s.cardinality());
+
+        Set s4 = new Set();
+        s.insert(new Integer(5));
+
+        s.intersect(s4);
+        System.out.println("After s.intersect(s4), s = " + s);
+        System.out.println("s.cardinality() = " + s.cardinality());
+
+        s.insert(new Integer(1));
+        s.insert(new Integer(4));
+
+        System.out.println("Reconstruct s = " + s);
+        System.out.println("Reconstruct s.cardinality() = " + s.cardinality());
+
+        Set s5 = new Set();
+
+        s.intersect(s5);
+        System.out.println("After s.intersect(s5), s = " + s);
+        System.out.println("s.cardinality() = " + s.cardinality());
     }
 }
