@@ -28,12 +28,12 @@ public interface PositionList<E> {
     /**
      * Returns the node after the given in the list.
      */
-    Position<E> next();
+    Position<E> next(Position<E> p);
 
     /**
      * Returns the node before the given node in the list.
      */
-    Position<E> prev();
+    Position<E> prev(Position<E> p);
 
     /**
      * Inserts an element at the front of the list.
