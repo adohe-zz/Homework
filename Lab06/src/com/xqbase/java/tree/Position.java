@@ -1,7 +1,7 @@
 package com.xqbase.java.tree;
 
 /**
- * A tree position interface for the internal tree nodes.
+ * A tree position interface for the tree nodes.
  *
  * @author Tony he
  */
