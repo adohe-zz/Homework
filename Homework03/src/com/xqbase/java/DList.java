@@ -173,7 +173,7 @@ public class DList {
         if (node == null)
             return;
 
-        DListNode newNode = new DListNode(item, node, node.next);
+        DListNode newNode = newNode(item, node, node.next);
         node.next.prev = newNode;
         node.next = newNode;
         size++;
@@ -225,5 +225,110 @@ public class DList {
             current = current.next;
         }
         return result + "]";
+    }
+
+    public static void main(String[] args) {
+        DList l = new DList();
+        System.out.println("### TESTING insertFront ###\nEmpty list is " + l);
+
+        l.insertFront(9);
+        System.out.println("\nInserting 9 at front.\nList with 9 is " + l);
+        if (((Integer)l.head.next.item) != 9) {
+            System.out.println("head.next.item is wrong.");
+        }
+        if (((Integer)l.front().item) != 9) {
+            System.out.println("l.front().item is wrong.");
+        }
+        if (l.head.next.prev != l.head) {
+            System.out.println("head.next.prev is wrong.");
+        }
+        if (((Integer)l.head.prev.item) != 9) {
+            System.out.println("head.prev.item is wrong.");
+        }
+        if (l.head.prev.next != l.head) {
+            System.out.println("head.prev.next is wrong.");
+        }
+        if (l.size != 1) {
+            System.out.println("size is wrong.");
+        }
+
+        l.insertFront(8);
+        System.out.println("\nInserting 8 at front.\nList with 8 and 9 is " + l);
+        if (((Integer)l.head.next.item) != 8) {
+            System.out.println("head.next.item is wrong.");
+        }
+        if (((Integer)l.front().item) != 8) {
+            System.out.println("l.font().item is wrong.");
+        }
+        if (l.head.next.prev != l.head) {
+            System.out.println("head.next.prev is wrong.");
+        }
+        if (((Integer)l.head.prev.item) != 9) {
+            System.out.println("head.prev.item is wrong.");
+        }
+        if (l.head.prev.next != l.head) {
+            System.out.println("head.prev.next is wrong.");
+        }
+        if (l.head.next.next != l.head.prev) {
+            System.out.println("l.head.next.next != l.head.prev.");
+        }
+        if (l.head.prev.prev != l.head.next) {
+            System.out.println("l.head.prev.prev != l.head.next.");
+        }
+        if (l.size != 2) {
+            System.out.println("size is wrong.");
+        }
+
+
+
+        l.insertBack(7);
+        System.out.println("\nInserting 7 at back.\nList with 8, 9 and 7 is " + l);
+        if (((Integer)l.back().item) != 7) {
+            System.out.println("list.back().item is wrong");
+        }
+        if (l.size != 3) {
+            System.out.println("size is wrong.");
+        }
+
+        l.insertBefore(6, l.back());
+        System.out.println("\nInserting 6 before back node.\nList with 8, 9, 7 and 6 is " + l);
+        if (((Integer)l.back().prev.item) != 6) {
+            System.out.println("insertAfter() is wrong.");
+        }
+        if (l.size != 4) {
+            System.out.println("size is wrong.");
+        }
+
+        l.insertAfter(5, l.front());
+        System.out.println("\nInserting 5 after front node.\nList with 8, 9, 7, 6 and 5 is " + l);
+        if (((Integer)l.front().next.item) != 5) {
+            System.out.println("insertBefore() is wrong.");
+        }
+        if (l.size != 5) {
+            System.out.println("size is wrong.");
+        }
+
+        if (((Integer)l.prev(l.back()).item) != 6) {
+            System.out.println("prev() is wrong.");
+        }
+        if (((Integer)l.next(l.front()).item) != 5) {
+            System.out.println("next() is wrong.");
+        }
+
+        l.remove(l.back());
+        if (((Integer)l.back().item) == 7) {
+            System.out.println("remove() is wrong.");
+        }
+        if (l.size != 4) {
+            System.out.println("size is wrong.");
+        }
+
+        l.remove(l.front());
+        if (((Integer)l.front().item) != 5) {
+            System.out.println("remove() is wrong.");
+        }
+        if (l.size != 3) {
+            System.out.println("size is wrong.");
+        }
     }
 }

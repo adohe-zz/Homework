@@ -2,6 +2,8 @@ package com.xqbase.java;
 
 /**
  * A LockDListNode is a node in a LockDList
+ *
+ * @author Tony He
  */
 public class LockDListNode extends DListNode {
 
