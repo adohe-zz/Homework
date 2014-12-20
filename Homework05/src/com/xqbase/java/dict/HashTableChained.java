@@ -4,6 +4,8 @@ package com.xqbase.java.dict;
 
 import com.xqbase.java.list.DList;
 
+import java.util.Random;
+
 /**
  * HashTableChained implements a Dictionary as a hash table with chaining.
  * All objects used as keys must have a valid hashCode() method, which is
@@ -32,7 +34,8 @@ public class HashTableChained implements Dictionary {
      */
 
     public HashTableChained(int sizeEstimate) {
-        // Your solution here.
+        loadFactor = 0.75f;
+        table = new DList[getNearestPrime((int)Math.ceil(sizeEstimate/loadFactor))];
     }
 
     /**
@@ -41,8 +44,8 @@ public class HashTableChained implements Dictionary {
      */
 
     public HashTableChained() {
-        table = new DList[11];
         loadFactor = 0.75f;
+        table = new DList[101];
     }
 
     /**
@@ -54,8 +57,11 @@ public class HashTableChained implements Dictionary {
      */
 
     int compFunction(int code) {
-        // Replace the following line with your solution.
-        return 88;
+        int p = getNearestPrime(table.length);
+        Random r = new Random();
+        int a = r.nextInt(p);
+        int b = r.nextInt(p);
+        return ((a * code + b) % p) % table.length;
     }
 
     /**
@@ -68,7 +74,7 @@ public class HashTableChained implements Dictionary {
 
     public int size() {
         // Replace the following line with your solution.
-        return 0;
+        return count;
     }
 
     /**
@@ -78,8 +84,7 @@ public class HashTableChained implements Dictionary {
      */
 
     public boolean isEmpty() {
-        // Replace the following line with your solution.
-        return true;
+        return size() == 0;
     }
 
     /**
@@ -142,4 +147,30 @@ public class HashTableChained implements Dictionary {
         // Your solution here.
     }
 
+    /**
+     * Whether a num is prime.
+     */
+    private boolean isPrime(int num) {
+        if (num == 2)
+            return true;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num%i == 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the nearest prime number;
+     */
+    private int getNearestPrime(int num) {
+        for (int i = num; i < 2 * num; i++) {
+            if (isPrime(i))
+                return i;
+        }
+
+        // This should not happen in real case.
+        return 2;
+    }
 }
