@@ -59,7 +59,7 @@ public class HashTableChained implements Dictionary {
     int compFunction(int code) {
         int p = getNearestPrime(table.length);
         Random r = new Random();
-        int a = r.nextInt(p);
+        int a = r.nextInt(p - 1) + 1;
         int b = r.nextInt(p);
         return ((a * code + b) % p) % table.length;
     }
@@ -73,7 +73,6 @@ public class HashTableChained implements Dictionary {
      */
 
     public int size() {
-        // Replace the following line with your solution.
         return count;
     }
 
@@ -148,13 +147,13 @@ public class HashTableChained implements Dictionary {
     }
 
     /**
-     * Whether a num is prime.
+     * Whether a num is prime or not.
      */
-    private boolean isPrime(int num) {
-        if (num == 2)
-            return true;
+    private static boolean isPrime(int num) {
+        if (num < 2)
+            return false;
         for (int i = 2; i <= Math.sqrt(num); i++) {
-            if (num%i == 0)
+            if (num % i == 0)
                 return false;
         }
 
@@ -162,9 +161,9 @@ public class HashTableChained implements Dictionary {
     }
 
     /**
-     * Get the nearest prime number;
+     * Get the nearest prime bigger than num.
      */
-    private int getNearestPrime(int num) {
+    private static int getNearestPrime(int num) {
         for (int i = num; i < 2 * num; i++) {
             if (isPrime(i))
                 return i;
@@ -172,5 +171,12 @@ public class HashTableChained implements Dictionary {
 
         // This should not happen in real case.
         return 2;
+    }
+
+    public static void main(String[] args) {
+        float loadF = 0.75f;
+        System.out.println(10/loadF);
+        System.out.println(Math.ceil(10/loadF));
+        System.out.println(getNearestPrime((int)Math.ceil(10/loadF)));
     }
 }
