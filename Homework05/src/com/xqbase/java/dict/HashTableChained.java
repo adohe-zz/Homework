@@ -3,6 +3,7 @@
 package com.xqbase.java.dict;
 
 import com.xqbase.java.list.DList;
+import com.xqbase.java.list.DListNode;
 
 import java.util.Random;
 
@@ -46,6 +47,13 @@ public class HashTableChained implements Dictionary {
     public HashTableChained() {
         loadFactor = 0.75f;
         table = new DList[101];
+    }
+
+    private Entry newEntry(Object key, Object value) {
+        Entry entry = new Entry();
+        entry.key = key;
+        entry.value = value;
+        return entry;
     }
 
     /**
@@ -100,8 +108,11 @@ public class HashTableChained implements Dictionary {
      */
 
     public Entry insert(Object key, Object value) {
-        // Replace the following line with your solution.
-        return null;
+        Entry entry = newEntry(key, value);
+        int index = compFunction(key.hashCode());
+        table[index].insertBack(entry);
+        count ++;
+        return entry;
     }
 
     /**
@@ -117,8 +128,10 @@ public class HashTableChained implements Dictionary {
      */
 
     public Entry find(Object key) {
-        // Replace the following line with your solution.
-        return null;
+        int index = compFunction(key.hashCode());
+        // delegate this to the list find method
+        DListNode node = table[index].find(newEntry(key, null));
+        return node == null ? null : node.entry;
     }
 
     /**
@@ -135,7 +148,13 @@ public class HashTableChained implements Dictionary {
      */
 
     public Entry remove(Object key) {
-        // Replace the following line with your solution.
+        int index = compFunction(key.hashCode());
+        DListNode node = table[index].find(newEntry(key, null));
+        if (node != null) {
+            table[index].remove(node);
+            count --;
+            return node.entry;
+        }
         return null;
     }
 
@@ -143,7 +162,12 @@ public class HashTableChained implements Dictionary {
      * Remove all entries from the dictionary.
      */
     public void makeEmpty() {
-        // Your solution here.
+        if (isEmpty())
+            return;
+        for (int i = 0; i < table.length; i++) {
+            table[i].clear();
+        }
+        count = 0;
     }
 
     /**
@@ -177,6 +201,6 @@ public class HashTableChained implements Dictionary {
         float loadF = 0.75f;
         System.out.println(10/loadF);
         System.out.println(Math.ceil(10/loadF));
-        System.out.println(getNearestPrime((int)Math.ceil(10/loadF)));
+        System.out.println(getNearestPrime((int) Math.ceil(10 / loadF)));
     }
 }
