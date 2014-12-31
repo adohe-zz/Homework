@@ -101,7 +101,72 @@ public class Tree234 extends IntDictionary {
    *  @param key is the key sought.
    **/
   public void insert(int key) {
-    // Fill in your solution here.
+      if (root == null) {
+          // empty tree
+          root = new Tree234Node(null, key);
+      } else {
+          Tree234Node node = root;
+          while (node != null) {
+              if (node.keys == 3) {
+                  Tree234Node parent = node.parent;
+                  if (parent == null) {
+                      root = new Tree234Node(null, node.key2);
+                      root.child1 = new Tree234Node(root, node.key1);
+                      root.child2 = new Tree234Node(root, node.key3);
+                      if (key < root.key1) {
+                          node = root.child1;
+                      } else {
+                          node = root.child2;
+                      }
+                  } else {
+                      // merge with the parent
+                      int key2 = node.key2;
+                      if (parent.keys == 1) {
+                          if (key2 < parent.key1) {
+
+                          } else {
+                              parent.key2 = key2;
+                              parent.child2 = new Tree234Node(parent, node.key1);
+                              parent.child3 = new Tree234Node(parent, node.key3);
+                          }
+                      }
+                  }
+              } else {
+                  if (key < node.key1) {
+                      if (node.child1 == null) {
+                          node.key3 = node.key2;
+                          node.key2 = node.key1;
+                          node.key1 = key;
+                          node.keys = node.keys + 1;
+                          break;
+                      } else {
+                          node = node.child1;
+                      }
+                  } else if (key == node.key1) {
+                      break;
+                  } else if ((node.keys == 1) || (key < node.key2)) {
+                      if (node.child2 == null) {
+                          node.key3 = node.key2;
+                          node.key2 = key;
+                          node.keys = node.keys + 1;
+                          break;
+                      } else {
+                          node = node.child2;
+                      }
+                  } else if (key == node.key2) {
+                      break;
+                  } else if ((node.keys == 2) || (key < node.key3)) {
+                      if (node.child3 == null) {
+                          node.key3 = key;
+                          node.keys = 3;
+                          break;
+                      } else {
+                          node = node.child3;
+                      }
+                  }
+              }
+          }
+      }
   }
 
 
