@@ -29,6 +29,9 @@ class Tree234Node {
     Tree234Node child3;
     Tree234Node child4;
 
+    Tree234Node() {
+    }
+
     Tree234Node(Tree234Node p, int key) {
         keys = 1;
         key1 = key;
@@ -120,14 +123,6 @@ class Tree234Node {
         }
     }
 
-    /**
-     * Whether the node is leaf node or not.
-     */
-    private boolean isLeafNode() {
-        if (child1 != null || child2 != null || child3 != null || child4 != null)
-            return false;
-        return true;
-    }
 
     /**
      * Inserts a new key.
@@ -136,7 +131,12 @@ class Tree234Node {
     private void insert(int key) {
         // need split this node.
         if (keys == 4) {
+            split();
 
+            if (parent != null) {
+                parent.insert(key);
+                return;
+            }
         }
 
         if (isLeafNode()) {
@@ -144,6 +144,57 @@ class Tree234Node {
         } else {
             addKeyToChildren(key);
         }
+    }
+
+    /**
+     * Splits this node.
+     */
+    private void split() {
+        if (isRootNode()) {
+
+        }
+    }
+
+    /**
+     * Splits the node in case the node is the root node.
+     */
+    private void splitRootNode() {
+        Tree234Node newChild1 = new Tree234Node();
+        Tree234Node newChild2 = new Tree234Node();
+
+        newChild1.key1 = key1;
+        newChild1.key1 = 1;
+
+        newChild2.key1 = key3;
+        newChild2.keys = 1;
+
+        key1 = key2;
+        keys = 1;
+        child3 = null;
+        child4 = null;
+    }
+
+    /**
+     * Splits the non-root node.
+     */
+    private void splitNonRootNode() {
+
+    }
+
+    /**
+     * Whether the node is the root node of not.
+     */
+    private boolean isRootNode() {
+        return parent == null;
+    }
+
+    /**
+     * Whether the node is leaf node or not.
+     */
+    private boolean isLeafNode() {
+        if (child1 != null || child2 != null || child3 != null || child4 != null)
+            return false;
+        return true;
     }
 
     /**
