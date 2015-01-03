@@ -151,7 +151,9 @@ class Tree234Node {
      */
     private void split() {
         if (isRootNode()) {
-
+            splitRootNode();
+        } else {
+            splitNonRootNode();
         }
     }
 
@@ -164,9 +166,15 @@ class Tree234Node {
 
         newChild1.key1 = key1;
         newChild1.key1 = 1;
+        newChild1.addChildNode(child1, 1);
+        newChild1.addChildNode(child2, 2);
+        addChildNode(newChild1, 1);
 
         newChild2.key1 = key3;
         newChild2.keys = 1;
+        newChild2.addChildNode(child3, 1);
+        newChild2.addChildNode(child4, 2);
+        addChildNode(newChild2, 2);
 
         key1 = key2;
         keys = 1;
@@ -198,7 +206,7 @@ class Tree234Node {
     }
 
     /**
-     * Inserts this key to the node itself.
+     * Inserts this key to the node itself.(the node is a non-full leaf node)
      */
     private void addKeyToSelf(int key) {
 
@@ -208,6 +216,61 @@ class Tree234Node {
      * Inserts this key to children nodes.
      */
     private void addKeyToChildren(int key) {
+        Tree234Node node = null;
+        int index = 0;
+        if (key < key1) {
+            node = child1;
+            index = 1;
+        } else if (key == key1) {
+            // do nothing
+            return;
+        } else if ((keys == 1) || (key < key2)) {
+            node = child2;
+            index = 2;
+        } else if (key == key2) {
+            // do nothing
+            return;
+        } else if ((keys == 2) || (key < key3)) {
+            node = child3;
+            index = 3;
+        } else if (key == key3) {
+            // do nothing
+            return;
+        } else {
+            node = child4;
+            index = 4;
+        }
 
+        if (node == null) {
+            node = new Tree234Node();
+            node.addKeyToSelf(key);
+            addChildNode(node, index);
+        } else {
+            node.insert(key);
+        }
+    }
+
+    /**
+     * Adds a new child node.
+     */
+    private void addChildNode(Tree234Node childNode, int index) {
+        switch (index) {
+            case 1:
+                child1 = childNode;
+                break;
+            case 2:
+                child2 = childNode;
+                break;
+            case 3:
+                child3 = childNode;
+                break;
+            case 4:
+                child4 = childNode;
+                break;
+        }
+
+        if (childNode != null) {
+            childNode.parent = this;
+        }
     }
 }
