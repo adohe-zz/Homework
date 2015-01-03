@@ -128,7 +128,7 @@ class Tree234Node {
      * Inserts a new key.
      * @param key
      */
-    private void insert(int key) {
+    public void insert(int key) {
         // need split this node.
         if (keys == 4) {
             split();
@@ -186,7 +186,23 @@ class Tree234Node {
      * Splits the non-root node.
      */
     private void splitNonRootNode() {
+        Tree234Node newNode = new Tree234Node();
 
+        newNode.key1 = key1;
+        newNode.keys = 1;
+        newNode.addChildNode(child1, 1);
+        newNode.addChildNode(child2, 2);
+
+        int index = parent.getIndex(this);
+        // we need to move the parent children and also key
+        parent.addChildNode(newNode, index);
+
+        key1 = key3;
+        keys = 1;
+        addChildNode(child2, 1);
+        addChildNode(child3, 2);
+        child2 = null;
+        child3 = null;
     }
 
     /**
@@ -287,5 +303,18 @@ class Tree234Node {
         if (childNode != null) {
             childNode.parent = this;
         }
+    }
+
+    private int getIndex(Tree234Node node) {
+        if (node == child1)
+            return 1;
+        if (node == child2)
+            return 2;
+        if (node == child3)
+            return 3;
+        if (node == child4)
+            return 4;
+
+        return -1;
     }
 }

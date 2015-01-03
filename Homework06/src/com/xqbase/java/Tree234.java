@@ -101,6 +101,9 @@ public class Tree234 extends IntDictionary {
      * @param key is the key sought.
      */
     public void insert(int key) {
+        if (root == null)
+            root = new Tree234Node();
+        root.insert(key);
     }
 
 
