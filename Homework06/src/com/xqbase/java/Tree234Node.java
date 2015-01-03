@@ -209,7 +209,22 @@ class Tree234Node {
      * Inserts this key to the node itself.(the node is a non-full leaf node)
      */
     private void addKeyToSelf(int key) {
-
+        if (key < key1) {
+            key3 = key2;
+            key2 = key1;
+            key1 = key;
+        } else if (key == key1) {
+            // do nothing.
+            return;
+        } else if (key < key2) {
+            key3 = key2;
+            key2 = key;
+        } else if (key == key2) {
+            // do nothing.
+            return;
+        } else {
+            key3 = key;
+        }
     }
 
     /**
