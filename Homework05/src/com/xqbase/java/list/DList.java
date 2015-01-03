@@ -150,6 +150,33 @@ public class DList {
         }
     }
 
+    /**
+     * find() finds the specific entry from the list. If found return this
+     * entry node, otherwise return null;
+     */
+    public DListNode find(Entry entry) {
+        DListNode head = front();
+        while (head != null) {
+            if (head.entry.key().equals(entry.key()))
+                return head;
+            head = head.next;
+        }
+
+        return null;
+    }
+
+    /**
+     * clear() removes all the node in the list.
+     */
+    public void clear() {
+        DListNode head = front();
+        while (head != null) {
+            DListNode next = head.next;
+            remove(head);
+            head = next;
+        }
+    }
+
     @Override
     public String toString() {
         String result = "[  ";
