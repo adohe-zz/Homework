@@ -8,8 +8,12 @@ package com.xqbase.java;/* SimpleBoard.java */
  */
 
 public class SimpleBoard {
+
     private final static int DIMENSION = 8;
     private int[][] grid;
+
+    /** Cache the hash code of this SimpleBoard. */
+    private int hash;
 
     /**
      *  Invariants:
@@ -91,8 +95,20 @@ public class SimpleBoard {
      */
 
     public int hashCode() {
-        // Replace the following line with your solution.
-        return 99;
+        int index = 0;
+        int h = hash;
+
+        if (h == 0) {
+            int[][] g = grid;
+            for (int i = 0; i < DIMENSION; i++) {
+                for (int j = 0; j < DIMENSION; j++) {
+                    h += Math.pow(3, index) * g[i][j];
+                    index ++;
+                }
+            }
+        }
+
+        return h;
     }
 
 }
