@@ -2,6 +2,7 @@ package com.xqbase.java.util;
 
 import com.xqbase.java.Position;
 import com.xqbase.java.Tree;
+import com.xqbase.java.Visitor;
 import com.xqbase.java.exceptions.BoundaryViolationException;
 import com.xqbase.java.exceptions.InvalidPositionException;
 
@@ -40,5 +41,16 @@ public class TreeUtil {
 
             return 1 + h;
         }
+    }
+
+    /**
+     * Implements the pre-order traversal of the subtree rooted at
+     * Position p.
+     */
+    public static <E> void preOrder(Tree<E> tree, Position<E> p, Visitor<E> v) {
+        v.visit(p);
+        Iterable<Position<E>> children = tree.children(p);
+        for (Position<E> child : children)
+            preOrder(tree, child, v);
     }
 }
