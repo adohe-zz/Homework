@@ -46,6 +46,8 @@ public class TreeUtil {
     /**
      * Implements the pre-order traversal of the subtree rooted at
      * Position p.
+     *
+     * O(n)
      */
     public static <E> void preOrder(Tree<E> tree, Position<E> p, Visitor<E> v) {
         v.visit(p);
