@@ -58,9 +58,4 @@ public interface Tree<E> {
      * Returns whether a given node is the root.
      */
     boolean isRoot(Position<E> v) throws InvalidPositionException;
-
-    /**
-     * Returns the depth of a given node in this tree.
-     */
-    int depth(Position<E> v) throws InvalidPositionException;
 }
