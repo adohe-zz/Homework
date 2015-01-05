@@ -55,4 +55,17 @@ public class TreeUtil {
         for (Position<E> child : children)
             preOrder(tree, child, v);
     }
+
+    /**
+     * Implements the post-order traversal of the subtree rooted at
+     * Position p.
+     *
+     * O(n)
+     */
+    public static <E> void postOrder(Tree<E> tree, Position<E> p, Visitor<E> v) {
+        Iterable<Position<E>> children = tree.children(p);
+        for (Position<E> child : children)
+            postOrder(tree, child, v);
+        v.visit(p);
+    }
 }
