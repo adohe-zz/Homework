@@ -25,8 +25,13 @@ public class HashTableChained implements Dictionary {
     private DList[] table;
     /** The total number of entries in the hash table. */
     private int count;
-    /** The load factor for the hash table. */
+    /** The load factor of the hash table. */
     private float loadFactor;
+    /** The init capacity (bucket array size) of the hash table. */
+    private int initCapacity;
+
+    private int seedA;
+    private int seedB;
 
     /**
      * Construct a new empty hash table intended to hold roughly sizeEstimate
@@ -36,7 +41,10 @@ public class HashTableChained implements Dictionary {
 
     public HashTableChained(int sizeEstimate) {
         loadFactor = 0.75f;
-        table = new DList[getNearestPrime((int)Math.ceil(sizeEstimate/loadFactor))];
+        initCapacity = getNearestPrime((int)Math.ceil(sizeEstimate/loadFactor));
+        table = new DList[initCapacity];
+        init();
+        initHashSeed();
     }
 
     /**
@@ -46,7 +54,19 @@ public class HashTableChained implements Dictionary {
 
     public HashTableChained() {
         loadFactor = 0.75f;
-        table = new DList[101];
+        initCapacity = 101;
+        table = new DList[initCapacity];
+        init();
+        initHashSeed();
+    }
+
+    /**
+     * Construct the underlying doubly linked list.
+     */
+    private void init() {
+        for (int i = 0; i < initCapacity; i++) {
+            table[i] = new DList();
+        }
     }
 
     private Entry newEntry(Object key, Object value) {
@@ -54,6 +74,16 @@ public class HashTableChained implements Dictionary {
         entry.key = key;
         entry.value = value;
         return entry;
+    }
+
+    /**
+     * Initialize the hashing seed.
+     */
+    private void initHashSeed() {
+        int p = getNearestPrime(initCapacity);
+        Random r = new Random();
+        seedA = r.nextInt(p - 1) + 1;
+        seedB = r.nextInt(p);
     }
 
     /**
@@ -65,11 +95,8 @@ public class HashTableChained implements Dictionary {
      */
 
     int compFunction(int code) {
-        int p = getNearestPrime(table.length);
-        Random r = new Random();
-        int a = r.nextInt(p - 1) + 1;
-        int b = r.nextInt(p);
-        return ((a * code + b) % p) % table.length;
+        int p = getNearestPrime(initCapacity);
+        return ((seedA * code + seedB) % p) % initCapacity;
     }
 
     /**
@@ -110,7 +137,7 @@ public class HashTableChained implements Dictionary {
     public Entry insert(Object key, Object value) {
         Entry entry = newEntry(key, value);
         int index = compFunction(key.hashCode());
-        table[index].insertBack(entry);
+        table[index].insertFront(entry);
         count ++;
         return entry;
     }
