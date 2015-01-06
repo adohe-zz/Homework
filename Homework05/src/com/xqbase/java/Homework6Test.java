@@ -39,6 +39,12 @@ public class Homework6Test {
         }
     }
 
+    public static double getExpectedCollisionNumber(int buckets, int keys) {
+        double d = 1.0 - 1.0/buckets;
+        d = Math.pow(d, keys);
+        return keys - buckets + buckets * d;
+    }
+
     /**
      * Creates a hash table and stores a certain number of SimpleBoards in it.
      * The number is 100 by default, but you can specify any number at the
@@ -120,6 +126,8 @@ public class Homework6Test {
         HashTableChained table = new HashTableChained(numBoards);
         initTable(table, numBoards);
 
+        System.out.println("Actual Collision Count: " + table.getCollisionCount());
+        System.out.println("Expected Collision Count" + getExpectedCollisionNumber(table.initCapacity, numBoards));
         // To test your hash function, add a method to your HashTableChained class
         // that counts the number of collisions--or better yet, also prints
         // a histograph of the number of entries in each bucket.  Call this method

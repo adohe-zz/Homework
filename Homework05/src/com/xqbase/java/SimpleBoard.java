@@ -97,17 +97,17 @@ public class SimpleBoard {
      */
 
     public int hashCode() {
-        int index = 0;
         int h = hash;
+        StringBuilder sb = new StringBuilder();
 
         if (h == 0) {
             int[][] g = grid;
             for (int i = 0; i < DIMENSION; i++) {
                 for (int j = 0; j < DIMENSION; j++) {
-                    h += Math.pow(3, index) * g[i][j];
-                    index++;
+                    sb.append(g[i][j]);
                 }
             }
+            h = sb.toString().hashCode();
         }
 
         return h;

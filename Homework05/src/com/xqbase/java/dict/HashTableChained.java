@@ -36,7 +36,7 @@ public class HashTableChained implements Dictionary {
     /**
      * The init capacity (bucket array size) of the hash table.
      */
-    private int initCapacity;
+    public int initCapacity;
 
     /**
      * Randomizing values associated with this instance that is used by the {@code compFunction}.
@@ -107,11 +107,15 @@ public class HashTableChained implements Dictionary {
      * This function should have package protection (so we can test it), and
      * should be used by insert, find, and remove.
      */
-
     int compFunction(int code) {
         int p = getNearestPrime(initCapacity);
-        return ((seedA * code + seedB) % p) % initCapacity;
+        return Math.abs(((seedA * code + seedB) % p) % initCapacity);
     }
+
+    /*int compFunction(int code) {
+        code = code < 0 ? -code : code;
+        return code % initCapacity;
+    }*/
 
     /**
      * Returns the number of entries stored in the dictionary.  Entries with
@@ -153,7 +157,7 @@ public class HashTableChained implements Dictionary {
         int index = compFunction(key.hashCode());
         DList bucket = table[index];
         if (!bucket.isEmpty())
-            collisionCount ++;
+            collisionCount++;
         bucket.insertFront(entry);
         count++;
         return entry;
@@ -239,6 +243,10 @@ public class HashTableChained implements Dictionary {
 
         // This should not happen in real case.
         return 2;
+    }
+
+    public int getCollisionCount() {
+        return this.collisionCount;
     }
 
     public static void main(String[] args) {
