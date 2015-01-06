@@ -38,8 +38,14 @@ public class HashTableChained implements Dictionary {
      */
     private int initCapacity;
 
+    /**
+     * Randomizing values associated with this instance that is used by the {@code compFunction}.
+     */
     private int seedA;
     private int seedB;
+
+    // Collision Counter
+    private int collisionCount = 0;
 
     /**
      * Construct a new empty hash table intended to hold roughly sizeEstimate
@@ -145,7 +151,10 @@ public class HashTableChained implements Dictionary {
     public Entry insert(Object key, Object value) {
         Entry entry = newEntry(key, value);
         int index = compFunction(key.hashCode());
-        table[index].insertFront(entry);
+        DList bucket = table[index];
+        if (!bucket.isEmpty())
+            collisionCount ++;
+        bucket.insertFront(entry);
         count++;
         return entry;
     }

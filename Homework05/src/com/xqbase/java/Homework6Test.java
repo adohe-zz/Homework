@@ -1,5 +1,6 @@
 package com.xqbase.java;/* Homework6Test.java */
 
+import com.xqbase.java.dict.Entry;
 import com.xqbase.java.dict.HashTableChained;
 
 /**
@@ -47,6 +48,67 @@ public class Homework6Test {
      */
 
     public static void main(String[] args) {
+
+        // Test the HashTableChained
+        HashTableChained hashTable = new HashTableChained();
+        if (!hashTable.isEmpty()) {
+            System.out.println("HashTable should be empty!!!");
+        }
+        hashTable.insert("Tony", "China");
+        hashTable.insert("John", "US");
+        hashTable.insert("Allen", "UK");
+        hashTable.insert("Bob", "UA");
+        hashTable.insert("Sakula", "Ck");
+        if (hashTable.size() != 5) {
+            System.out.println("HashTable should just has 5 entries");
+        }
+        if (hashTable.find("Tony").value() != "China") {
+            System.out.println("Tony belongs to China");
+        }
+        if (hashTable.find("John").value() != "US") {
+            System.out.println("John belongs to US");
+        }
+        if (hashTable.find("Allen").value() != "UK") {
+            System.out.println("Allen belongs to UK");
+        }
+        if (hashTable.find("Bob").value() != "UA") {
+            System.out.println("Bob belongs to UA");
+        }
+        if (hashTable.find("Sakula").value() != "Ck") {
+            System.out.println("Sakula belongs  to Ck");
+        }
+        Entry entry = hashTable.remove("Tony");
+        if (entry.value() != "China") {
+            System.out.println("Value should be China");
+        }
+        entry = hashTable.find("Tony");
+        if (entry != null) {
+            System.out.println("HashTable should not contain Tony");
+        }
+        if (hashTable.size() != 4) {
+            System.out.println("HashTable should just has 4 entries");
+        }
+        entry = hashTable.remove("John");
+        if (entry.value() != "US") {
+            System.out.println("Value should be US");
+        }
+        entry = hashTable.find("John");
+        if (entry != null) {
+            System.out.println("HashTable should not contain John");
+        }
+        if (hashTable.size() != 3) {
+            System.out.println("HashTable should just has 3 entries");
+        }
+        hashTable.makeEmpty();
+        if (hashTable.size() != 0) {
+            System.out.println("HashTable should be empty");
+        }
+        entry = hashTable.find("Tony");
+        if (entry != null) {
+            System.out.println("HashTable should not contain any entry");
+        }
+
+        System.out.println("Everything is ok...");
 
         int numBoards;
 
