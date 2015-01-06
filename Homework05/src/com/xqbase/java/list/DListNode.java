@@ -5,12 +5,12 @@ package com.xqbase.java.list;
 import com.xqbase.java.dict.Entry;
 
 /**
- *  DListNode is a class used internally by the DList class.  An DList object
- *  is a doubly-linked list, and an DListNode is a node of a doubly-linked
- *  list.  Each DListNode has three references:  one to an object, one to
- *  the next node in the list, and one to the prev node in the list.
+ * DListNode is a class used internally by the DList class.  An DList object
+ * is a doubly-linked list, and an DListNode is a node of a doubly-linked
+ * list.  Each DListNode has three references:  one to an object, one to
+ * the next node in the list, and one to the prev node in the list.
  *
- *  @author Tony He
+ * @author Tony He
  */
 public class DListNode {
 
@@ -21,6 +21,7 @@ public class DListNode {
 
     /**
      * Construct a new DListNode instance
+     *
      * @param entry data value
      */
     public DListNode(Entry entry) {

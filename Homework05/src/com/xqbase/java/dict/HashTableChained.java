@@ -21,13 +21,21 @@ import java.util.Random;
 
 public class HashTableChained implements Dictionary {
 
-    /** The has table data .*/
+    /**
+     * The has table data .
+     */
     private DList[] table;
-    /** The total number of entries in the hash table. */
+    /**
+     * The total number of entries in the hash table.
+     */
     private int count;
-    /** The load factor of the hash table. */
+    /**
+     * The load factor of the hash table.
+     */
     private float loadFactor;
-    /** The init capacity (bucket array size) of the hash table. */
+    /**
+     * The init capacity (bucket array size) of the hash table.
+     */
     private int initCapacity;
 
     private int seedA;
@@ -41,7 +49,7 @@ public class HashTableChained implements Dictionary {
 
     public HashTableChained(int sizeEstimate) {
         loadFactor = 0.75f;
-        initCapacity = getNearestPrime((int)Math.ceil(sizeEstimate/loadFactor));
+        initCapacity = getNearestPrime((int) Math.ceil(sizeEstimate / loadFactor));
         table = new DList[initCapacity];
         init();
         initHashSeed();
@@ -138,7 +146,7 @@ public class HashTableChained implements Dictionary {
         Entry entry = newEntry(key, value);
         int index = compFunction(key.hashCode());
         table[index].insertFront(entry);
-        count ++;
+        count++;
         return entry;
     }
 
@@ -179,7 +187,7 @@ public class HashTableChained implements Dictionary {
         DListNode node = table[index].find(newEntry(key, null));
         if (node != null) {
             table[index].remove(node);
-            count --;
+            count--;
             return node.entry;
         }
         return null;
@@ -191,7 +199,7 @@ public class HashTableChained implements Dictionary {
     public void makeEmpty() {
         if (isEmpty())
             return;
-        for (int i = 0; i < table.length; i++) {
+        for (int i = 0; i < initCapacity; i++) {
             table[i].clear();
         }
         count = 0;
@@ -226,8 +234,8 @@ public class HashTableChained implements Dictionary {
 
     public static void main(String[] args) {
         float loadF = 0.75f;
-        System.out.println(10/loadF);
-        System.out.println(Math.ceil(10/loadF));
+        System.out.println(10 / loadF);
+        System.out.println(Math.ceil(10 / loadF));
         System.out.println(getNearestPrime((int) Math.ceil(10 / loadF)));
     }
 }

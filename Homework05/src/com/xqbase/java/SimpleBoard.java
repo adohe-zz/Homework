@@ -12,7 +12,9 @@ public class SimpleBoard {
     private final static int DIMENSION = 8;
     private int[][] grid;
 
-    /** Cache the hash code of this SimpleBoard. */
+    /**
+     * Cache the hash code of this SimpleBoard.
+     */
     private int hash;
 
     /**
@@ -103,7 +105,7 @@ public class SimpleBoard {
             for (int i = 0; i < DIMENSION; i++) {
                 for (int j = 0; j < DIMENSION; j++) {
                     h += Math.pow(3, index) * g[i][j];
-                    index ++;
+                    index++;
                 }
             }
         }
