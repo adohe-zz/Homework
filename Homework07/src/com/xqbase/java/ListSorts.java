@@ -244,6 +244,11 @@ public class ListSorts {
         stopWatch.stop();
         System.out.println("Quicksort time, " + SORTSIZE + " Integers:  " +
                            stopWatch.elapsed() + " msec.");
+
+        /**
+         * The quickSort&mergeSort we implement are both stable. Since
+         * there is no equal items position change.
+         */
     }
 
 }
