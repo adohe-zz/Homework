@@ -7,7 +7,7 @@ public class Sorts {
     /**
      *  Place any final static fields you would like to have here.
      **/
-
+    private static final int MASK = 0x0000000f;
 
     /**
      * countingSort() sorts an array of int keys according to the
@@ -26,8 +26,33 @@ public class Sorts {
      * Note:  Return a _newly_ created array.  DO NOT CHANGE THE ARRAY keys.
      */
     public static int[] countingSort(int[] keys, int whichDigit) {
-        // Replace the following line with your solution.
-        return null;
+        if (whichDigit < 0 || whichDigit > 7) {
+            System.out.println("whichDigit should between 0 and 7");
+            return null;
+        }
+
+        int leftMask = whichDigit * 4;
+        int[] newKeys = new int[keys.length];
+        int[] tempArray = new int[16];
+
+        for (int i = 0; i < keys.length; i++) {
+            int key = (keys[i] >> leftMask) & MASK;
+            tempArray[key] = tempArray[key] + 1;
+        }
+
+        int total = 0;
+        for (int j = 0; j < tempArray.length; j++) {
+            int c = tempArray[j];
+            tempArray[j] = total;
+            total = total + c;
+        }
+
+        for (int k = 0; k < keys.length; k++) {
+            newKeys[tempArray[keys[k]]] = keys[k];
+            tempArray[keys[k]] = tempArray[keys[k]] + 1;
+        }
+
+        return newKeys;
     }
 
     /**
@@ -86,8 +111,16 @@ public class Sorts {
                 Integer.parseInt("40013879", 16)};
 
         yell(keys);
-        keys = radixSort(keys);
+        //keys = radixSort(keys);
         yell(keys);
+        /*System.out.println(Integer.toBinaryString(258));
+        int i = 258;
+        int j = i & 0x0000000f;
+        System.out.println(j);
+        System.out.println(Integer.toBinaryString(j));
+        int k = i >> 4;
+        System.out.println(k);
+        System.out.println(Integer.toBinaryString(k));*/
     }
 
 }
