@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class ListSorts {
 
-    private final static int SORTSIZE = 1000;
+    private final static int SORTSIZE = 10;
 
     /**
      * makeQueueOfQueues() makes a queue of queues, each containing one item
@@ -75,7 +75,7 @@ public class ListSorts {
                     q3.enqueue(q2.dequeue());
                 } else {
                     q3.enqueue(q1.dequeue());
-                    q2.dequeue();
+                    q3.enqueue(q2.dequeue());
                 }
             }
 
@@ -193,33 +193,57 @@ public class ListSorts {
      */
     public static void main(String[] args) {
 
-        LinkedQueue q = makeRandom(10);
+        /**
+         * Test mergeSort&quickSort
+         */
+        LinkedQueue q = makeRandom(SORTSIZE);
         System.out.println(q.toString());
         mergeSort(q);
         System.out.println(q.toString());
 
-        q = makeRandom(10);
+        q = makeRandom(SORTSIZE);
         System.out.println(q.toString());
         quickSort(q);
         System.out.println(q.toString());
 
-    /* Remove these comments for Part III.
-    Timer stopWatch = new Timer();
-    q = makeRandom(SORTSIZE);
-    stopWatch.start();
-    mergeSort(q);
-    stopWatch.stop();
-    System.out.println("Mergesort time, " + SORTSIZE + " Integers:  " +
-                       stopWatch.elapsed() + " msec.");
+        q = makeRandom(1);
+        System.out.println(q.toString());
+        mergeSort(q);
+        System.out.println(q.toString());
 
-    stopWatch.reset();
-    q = makeRandom(SORTSIZE);
-    stopWatch.start();
-    quickSort(q);
-    stopWatch.stop();
-    System.out.println("Quicksort time, " + SORTSIZE + " Integers:  " +
-                       stopWatch.elapsed() + " msec.");
-    */
+        q = makeRandom(1);
+        System.out.println(q.toString());
+        quickSort(q);
+        System.out.println(q.toString());
+
+        q = makeRandom(0);
+        System.out.println(q.toString());
+        mergeSort(q);
+        System.out.println(q.toString());
+
+        q = makeRandom(0);
+        System.out.println(q.toString());
+        quickSort(q);
+        System.out.println(q.toString());
+
+        /**
+         * Performance testing.
+         */
+        Timer stopWatch = new Timer();
+        q = makeRandom(SORTSIZE);
+        stopWatch.start();
+        mergeSort(q);
+        stopWatch.stop();
+        System.out.println("Mergesort time, " + SORTSIZE + " Integers:  " +
+                           stopWatch.elapsed() + " msec.");
+
+        stopWatch.reset();
+        q = makeRandom(SORTSIZE);
+        stopWatch.start();
+        quickSort(q);
+        stopWatch.stop();
+        System.out.println("Quicksort time, " + SORTSIZE + " Integers:  " +
+                           stopWatch.elapsed() + " msec.");
     }
 
 }
