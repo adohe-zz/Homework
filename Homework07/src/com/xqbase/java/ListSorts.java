@@ -3,6 +3,8 @@ package com.xqbase.java;/* ListSorts.java */
 import com.xqbase.java.list.LinkedQueue;
 import com.xqbase.java.list.QueueEmptyException;
 
+import java.util.Random;
+
 public class ListSorts {
 
     private final static int SORTSIZE = 1000;
@@ -108,7 +110,20 @@ public class ListSorts {
     public static void partition(LinkedQueue qIn, Comparable pivot,
                                  LinkedQueue qSmall, LinkedQueue qEquals,
                                  LinkedQueue qLarge) {
-        // Your solution here.
+        try {
+            while (!qIn.isEmpty()) {
+                Object o = qIn.dequeue();
+                if (pivot.compareTo(o) > 0) {
+                    qSmall.enqueue(o);
+                } else if (pivot.compareTo(o) == 0) {
+                    qEquals.enqueue(o);
+                } else {
+                    qLarge.enqueue(o);
+                }
+            }
+        } catch (QueueEmptyException e) {
+            System.out.println("Queue empty exception");
+        }
     }
 
     /**
@@ -137,7 +152,24 @@ public class ListSorts {
      * @param q is a LinkedQueue of Comparable objects.
      */
     public static void quickSort(LinkedQueue q) {
-        // Your solution here.
+        if (q == null || q.isEmpty())
+            return;
+
+        Random random = new Random();
+        Object pivot = q.nth(random.nextInt(q.size()) + 1);
+
+        LinkedQueue smallerQueue = new LinkedQueue();
+        LinkedQueue equalQueue = new LinkedQueue();
+        LinkedQueue largeQueue = new LinkedQueue();
+
+        partition(q, (Comparable) pivot, smallerQueue, equalQueue, largeQueue);
+
+        quickSort(smallerQueue);
+        quickSort(largeQueue);
+
+        q.append(smallerQueue);
+        q.append(equalQueue);
+        q.append(largeQueue);
     }
 
     /**
