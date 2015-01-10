@@ -1,6 +1,7 @@
 package com.xqbase.java;/* ListSorts.java */
 
 import com.xqbase.java.list.LinkedQueue;
+import com.xqbase.java.list.QueueEmptyException;
 
 public class ListSorts {
 
@@ -15,8 +16,17 @@ public class ListSorts {
      * contains one object from q.
      */
     public static LinkedQueue makeQueueOfQueues(LinkedQueue q) {
-        // Replace the following line with your solution.
-        return null;
+        LinkedQueue queue = new LinkedQueue();
+        try {
+            while (!q.isEmpty()) {
+                LinkedQueue newQueue = new LinkedQueue();
+                newQueue.enqueue(q.dequeue());
+                queue.enqueue(newQueue);
+            }
+        } catch (QueueEmptyException e) {
+            System.out.println("Empty queue exception");
+        }
+        return queue;
     }
 
     /**
@@ -32,8 +42,53 @@ public class ListSorts {
      * and q2 (and nothing else), sorted from smallest to largest.
      */
     public static LinkedQueue mergeSortedQueues(LinkedQueue q1, LinkedQueue q2) {
-        // Replace the following line with your solution.
-        return null;
+        if (q1 == null || q1.isEmpty())
+            return q2;
+        if (q2 == null || q2.isEmpty())
+            return q1;
+
+
+        try {
+            LinkedQueue q3 = new LinkedQueue();
+
+            if (((Comparable) q2.front()).compareTo(q1.nth(q1.size())) > 0) {
+                q3.append(q1);
+                q3.append(q2);
+                return q3;
+            }
+            if (((Comparable) q1.front()).compareTo(q2.nth(q2.size())) > 0) {
+                q3.append(q2);
+                q3.append(q1);
+                return q3;
+            }
+
+            while (!q1.isEmpty() && !q2.isEmpty()) {
+                Object o1 = q1.front();
+                Object o2 = q2.front();
+
+                int c = ((Comparable) o1).compareTo(o2);
+                if (c < 0) {
+                    q3.enqueue(q1.dequeue());
+                } else if (c > 0) {
+                    q3.enqueue(q2.dequeue());
+                } else {
+                    q3.enqueue(q1.dequeue());
+                    q2.dequeue();
+                }
+            }
+
+            while (!q1.isEmpty()) {
+                q3.enqueue(q1.dequeue());
+            }
+            while (!q2.isEmpty()) {
+                q3.enqueue(q2.dequeue());
+            }
+
+            return q3;
+        } catch (QueueEmptyException e) {
+            System.out.println("Queue is empty");
+            return null;
+        }
     }
 
     /**
@@ -62,7 +117,18 @@ public class ListSorts {
      * @param q is a LinkedQueue of Comparable objects.
      */
     public static void mergeSort(LinkedQueue q) {
-        // Your solution here.
+        LinkedQueue queueOfQueues = makeQueueOfQueues(q);
+        try {
+            while (queueOfQueues.size() != 1) {
+                LinkedQueue q1 = (LinkedQueue) queueOfQueues.dequeue();
+                LinkedQueue q2 = (LinkedQueue) queueOfQueues.dequeue();
+                queueOfQueues.enqueue(mergeSortedQueues(q1, q2));
+            }
+
+            q.enqueue(queueOfQueues.front());
+        } catch (QueueEmptyException e) {
+            System.out.println("Queue is empty");
+        }
     }
 
     /**
