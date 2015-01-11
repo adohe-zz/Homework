@@ -29,7 +29,12 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public Position<E> left(Position<E> p) throws InvalidPositionException, BoundaryViolationException {
-        return null;
+        BTPosition<E> pp = checkPosition(p);
+        Position<E> leftChild = pp.getLeft();
+        if (leftChild == null)
+            throw new BoundaryViolationException("No left child");
+
+        return leftChild;
     }
 
     @Override
@@ -45,7 +50,8 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public boolean hasRight(Position<E> p) throws InvalidPositionException {
-        return false;
+        BTPosition<E> pp = checkPosition(p);
+        return (pp.getRight() != null);
     }
 
     @Override
