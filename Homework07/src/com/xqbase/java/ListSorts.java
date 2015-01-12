@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class ListSorts {
 
-    private final static int SORTSIZE = 10;
+    private final static int SORTSIZE = 100;
 
     /**
      * makeQueueOfQueues() makes a queue of queues, each containing one item
