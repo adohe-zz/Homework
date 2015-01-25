@@ -182,7 +182,32 @@ public class WUGraph {
      * Running time:  O(d), where d is the degree of "vertex".
      */
     public Neighbors getNeighbors(Object vertex) {
-        return null;
+        if (!isVertex(vertex) || degree(vertex) == 0)
+            return null;
+
+        Vertex v = (Vertex) vertexTable.find(vertex).value();
+        int degree = degree(vertex);
+        DList<Edge> edgeDList = v.edgeDList;
+        Neighbors neighbors = new Neighbors();
+        Object[] neighborList = new Object[degree];
+        int[] weightList = new int[degree];
+        DListNode<Edge> head = edgeDList.front();
+        int i = 0;
+        while (head != null) {
+            Edge edge = head.item;
+            weightList[i] = edge.weight;
+            if (edge.origin.element.equals(vertex)) {
+                neighborList[i] = edge.dest.element;
+            } else {
+                neighborList[i] = edge.origin.element;
+            }
+            head = head.next;
+            i ++;
+        }
+        neighbors.neighborList = neighborList;
+        neighbors.weightList = weightList;
+
+        return neighbors;
     }
 
     /**
