@@ -15,10 +15,9 @@ import java.util.Random;
  * Integer.MIN_VALUE and Integer.MAX_VALUE.  The HashTableChained class
  * implements only the compression function, which maps the hash code to
  * a bucket in the table's range.
- * <p/>
- * DO NOT CHANGE ANY PROTOTYPES IN THIS FILE.
+ *
+ * @author Tony He
  */
-
 public class HashTable implements Dictionary {
 
     /**
@@ -37,13 +36,11 @@ public class HashTable implements Dictionary {
      * The init capacity (bucket array size) of the hash table.
      */
     public int initCapacity;
-
     /**
      * Randomizing values associated with this instance that is used by the {@code compFunction}.
      */
     private int seedA;
     private int seedB;
-
     // Collision Counter
     private int collisionCount = 0;
 
@@ -52,7 +49,6 @@ public class HashTable implements Dictionary {
      * entries.  (The precise number of buckets is up to you, but we recommend
      * you use a prime number, and shoot for a load factor between 0.5 and 1.)
      */
-
     public HashTable(int sizeEstimate) {
         loadFactor = 0.75f;
         initCapacity = getNearestPrime((int) Math.ceil(sizeEstimate / loadFactor));
@@ -65,7 +61,6 @@ public class HashTable implements Dictionary {
      * Construct a new empty hash table with a default size.  Say, a prime in
      * the neighborhood of 100.
      */
-
     public HashTable() {
         loadFactor = 0.75f;
         initCapacity = 101;
@@ -111,11 +106,6 @@ public class HashTable implements Dictionary {
         int p = getNearestPrime(initCapacity);
         return Math.abs(((seedA * code + seedB) % p) % initCapacity);
     }
-
-    /*int compFunction(int code) {
-        code = code < 0 ? -code : code;
-        return code % initCapacity;
-    }*/
 
     /**
      * Returns the number of entries stored in the dictionary.  Entries with
