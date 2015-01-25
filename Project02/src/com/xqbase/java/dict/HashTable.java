@@ -19,7 +19,7 @@ import java.util.Random;
  * DO NOT CHANGE ANY PROTOTYPES IN THIS FILE.
  */
 
-public class HashTableChained implements Dictionary {
+public class HashTable implements Dictionary {
 
     /**
      * The has table data .
@@ -53,7 +53,7 @@ public class HashTableChained implements Dictionary {
      * you use a prime number, and shoot for a load factor between 0.5 and 1.)
      */
 
-    public HashTableChained(int sizeEstimate) {
+    public HashTable(int sizeEstimate) {
         loadFactor = 0.75f;
         initCapacity = getNearestPrime((int) Math.ceil(sizeEstimate / loadFactor));
         table = new DList[initCapacity];
@@ -66,7 +66,7 @@ public class HashTableChained implements Dictionary {
      * the neighborhood of 100.
      */
 
-    public HashTableChained() {
+    public HashTable() {
         loadFactor = 0.75f;
         initCapacity = 101;
         table = new DList[initCapacity];
