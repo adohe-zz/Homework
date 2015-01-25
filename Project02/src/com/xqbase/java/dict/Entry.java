@@ -1,5 +1,3 @@
-/* Entry.java */
-
 package com.xqbase.java.dict;
 
 /**
@@ -7,7 +5,6 @@ package com.xqbase.java.dict;
  *
  * @author Tony He
  */
-
 public class Entry {
 
     protected Object key;
@@ -29,5 +26,4 @@ public class Entry {
     public Object value() {
         return value;
     }
-
 }

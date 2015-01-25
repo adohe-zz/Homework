@@ -1,5 +1,3 @@
-/* Dictionary.java */
-
 package com.xqbase.java.dict;
 
 /**

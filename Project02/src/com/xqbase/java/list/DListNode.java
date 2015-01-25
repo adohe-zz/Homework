@@ -4,8 +4,9 @@ import com.xqbase.java.dict.Entry;
 
 /**
  *  A DListNode is a node in a DList (doubly-linked list).
+ *
+ *  @author Tony He
  */
-
 public class DListNode {
 
     /**

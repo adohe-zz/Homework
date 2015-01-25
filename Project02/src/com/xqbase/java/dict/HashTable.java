@@ -1,5 +1,3 @@
-/* HashTableChained.java */
-
 package com.xqbase.java.dict;
 
 import com.xqbase.java.list.DList;
