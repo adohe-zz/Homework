@@ -199,7 +199,17 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public void removeEdge(Object u, Object v) {
+        if (!isVertex(u) || !isVertex(v))
+            return;
+        if (!isEdge(u, v))
+            return;
 
+        Edge edge = (Edge) edgeTable.find(new VertexPair(u, v)).value();
+        Vertex uVertex = (Vertex) vertexTable.find(u).value();
+        uVertex.edgeDList.remove(edge.firstNode);
+        Vertex vVertex = (Vertex) vertexTable.find(v).value();
+        vVertex.edgeDList.remove(edge.secondNode);
+        edgeCount --;
     }
 
     /**
@@ -210,7 +220,7 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public boolean isEdge(Object u, Object v) {
-        return false;
+        return edgeTable.contains(new VertexPair(u, v));
     }
 
     /**
@@ -228,7 +238,11 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public int weight(Object u, Object v) {
-        return 0;
+        if (!isEdge(u, v))
+            return 0;
+
+        Edge edge = (Edge) edgeTable.find(new VertexPair(u, v)).value();
+        return edge.weight;
     }
 
     /**
