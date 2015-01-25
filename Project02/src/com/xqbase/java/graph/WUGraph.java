@@ -137,7 +137,11 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public int degree(Object vertex) {
-        return 0;
+        if (!isVertex(vertex))
+            return 0;
+
+        Vertex v = (Vertex) vertexTable.find(vertex).value();
+        return v.edgeDList.length();
     }
 
     /**
@@ -172,7 +176,18 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public void addEdge(Object u, Object v, int weight) {
+        if (!isVertex(u) || !isVertex(v))
+            return;
 
+        Vertex uVertex = (Vertex) vertexTable.find(u).value();
+        Vertex vVertex = (Vertex) vertexTable.find(v).value();
+        Edge edge = new Edge(weight, uVertex, vVertex, null, null);
+        DListNode<Edge> firstNode = uVertex.edgeDList.insertFront(edge);
+        DListNode<Edge> secondNode = vVertex.edgeDList.insertFront(edge);
+        edge.firstNode = firstNode;
+        edge.secondNode = secondNode;
+        edgeTable.insert(new VertexPair(u, v), edge);
+        edgeCount ++;
     }
 
     /**
@@ -239,10 +254,16 @@ public class WUGraph {
         private Vertex origin;
         private Vertex dest;
 
-        public Edge(int weight, Vertex origin, Vertex dest) {
+        private DListNode<Edge> firstNode;
+        private DListNode<Edge> secondNode;
+
+        public Edge(int weight, Vertex origin, Vertex dest, DListNode<Edge> firstNode,
+                    DListNode<Edge> secondNode) {
             this.weight = weight;
             this.origin = origin;
             this.dest = dest;
+            this.firstNode = firstNode;
+            this.secondNode = secondNode;
         }
     }
 }

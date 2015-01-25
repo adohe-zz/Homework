@@ -76,11 +76,12 @@ public class DList<T> {
      *  @param t is the item to be inserted.
      *  Performance:  runs in O(1) time.
      */
-    public void insertFront(T t) {
+    public DListNode<T> insertFront(T t) {
         DListNode<T> newNode = newNode(t, head, head.next);
         head.next.prev = newNode;
         head.next = newNode;
         size ++;
+        return newNode;
     }
 
     /**
