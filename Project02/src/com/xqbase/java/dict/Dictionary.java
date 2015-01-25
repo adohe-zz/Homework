@@ -2,10 +2,9 @@ package com.xqbase.java.dict;
 
 /**
  * An interface for (unordered) dictionary ADTs.
- * <p/>
- * DO NOT CHANGE THIS FILE.
+ *
+ * @author Tony He
  */
-
 public interface Dictionary {
 
     /**
@@ -15,7 +14,6 @@ public interface Dictionary {
      *
      * @return number of entries in the dictionary.
      */
-
     public int size();
 
     /**
@@ -23,7 +21,6 @@ public interface Dictionary {
      *
      * @return true if the dictionary has no entries; false otherwise.
      */
-
     public boolean isEmpty();
 
     /**
@@ -36,7 +33,6 @@ public interface Dictionary {
      * @param value an arbitrary object.
      * @return an entry containing the key and value.
      */
-
     public Entry insert(Object key, Object value);
 
     /**
@@ -48,7 +44,6 @@ public interface Dictionary {
      * @return an entry containing the key and an associated value, or null if
      * no entry contains the specified key.
      */
-
     public Entry find(Object key);
 
     /**
@@ -61,7 +56,6 @@ public interface Dictionary {
      * @return an entry containing the key and an associated value, or null if
      * no entry contains the specified key.
      */
-
     public Entry remove(Object key);
 
     /**
@@ -70,4 +64,13 @@ public interface Dictionary {
 
     public void makeEmpty();
 
+    /**
+     * Returns an iterable object containing all of the keys.
+     */
+    public Iterable<Object> keySet();
+
+    /**
+     * Returns whether the dictionary has the corresponding key.
+     */
+    public boolean contains(Object key);
 }

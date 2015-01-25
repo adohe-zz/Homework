@@ -16,8 +16,8 @@ public class DListNode<T> {
      *
      */
     public T item;
-    protected DListNode prev;
-    protected DListNode next;
+    public DListNode prev;
+    public DListNode next;
 
     /**
      * Construct a new DListNode instance
@@ -32,12 +32,12 @@ public class DListNode<T> {
 
     /**
      *  DListNode() constructor.
-     *  @param item the entry to store in the node.
+     *  @param t the entry to store in the node.
      *  @param p the node previous to this node.
      *  @param n the node following this node.
      */
-    DListNode(T item, DListNode p, DListNode n) {
-        item = item;
+    DListNode(T t, DListNode p, DListNode n) {
+        item = t;
         prev = p;
         next = n;
     }

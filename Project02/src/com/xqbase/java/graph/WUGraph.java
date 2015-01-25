@@ -2,6 +2,10 @@
 
 package com.xqbase.java.graph;
 
+import com.xqbase.java.dict.HashTable;
+import com.xqbase.java.list.DList;
+import com.xqbase.java.list.DListNode;
+
 /**
  * The WUGraph class represents a weighted, undirected graph.  Self-edges are
  * permitted.
@@ -10,12 +14,37 @@ package com.xqbase.java.graph;
 public class WUGraph {
 
     /**
+     * The Vertex HashTable mapping application's vertex to the internal vertex.
+     */
+    private HashTable vertexTable;
+    /**
+     * The Vertex Doubly-Linked list.
+     */
+    private DList<Vertex> vertexList;
+    /**
+     * The Edge Hash Table.
+     */
+    private HashTable edgeTable;
+    /**
+     * The Adjacency List.
+     */
+    private DList<DList<Edge>> adjacencyList;
+
+    private int edgeCount;
+    private int vertexCount;
+
+    /**
      * WUGraph() constructs a graph having no vertices or edges.
      * <p/>
      * Running time:  O(1).
      */
     public WUGraph() {
-
+        vertexTable = new HashTable();
+        vertexList = new DList<Vertex>();
+        edgeTable = new HashTable();
+        adjacencyList = new DList<DList<Edge>>();
+        vertexCount = 0;
+        edgeCount = 0;
     }
 
     /**
@@ -24,7 +53,7 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public int vertexCount() {
-        return 0;
+        return vertexCount;
     }
 
     /**
@@ -33,7 +62,7 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public int edgeCount() {
-        return 0;
+        return edgeCount;
     }
 
     /**
@@ -49,7 +78,15 @@ public class WUGraph {
      * Running time:  O(|V|).
      */
     public Object[] getVertices() {
-        return null;
+        Object[] vertices = new Object[vertexCount];
+        DListNode<Vertex> head = vertexList.front();
+        int i = 0;
+        while (head != null) {
+            vertices[i] = head.item.element;
+            head = head.next;
+            i ++;
+        }
+        return vertices;
     }
 
     /**
@@ -60,7 +97,15 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public void addVertex(Object vertex) {
+        if (vertex == null)
+            return;
 
+        DList<Edge> edgeDList = new DList<Edge>();
+        Vertex v = new Vertex(vertex, edgeDList);
+        vertexTable.insert(vertex, v);
+        vertexList.insertFront(v);
+        adjacencyList.insertFront(edgeDList);
+        vertexCount ++;
     }
 
     /**
@@ -81,7 +126,7 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public boolean isVertex(Object vertex) {
-        return false;
+        return vertexTable.contains(vertex);
     }
 
     /**
@@ -176,5 +221,28 @@ public class WUGraph {
      */
     private static class Vertex {
 
+        private Object element;
+        private DList<Edge> edgeDList;
+
+        public Vertex(Object element, DList<Edge> edgeDList) {
+            this.element = element;
+            this.edgeDList = edgeDList;
+        }
+    }
+
+    /**
+     * The internal Edge class.
+     */
+    private static class Edge {
+
+        private int weight;
+        private Vertex origin;
+        private Vertex dest;
+
+        public Edge(int weight, Vertex origin, Vertex dest) {
+            this.weight = weight;
+            this.origin = origin;
+            this.dest = dest;
+        }
     }
 }

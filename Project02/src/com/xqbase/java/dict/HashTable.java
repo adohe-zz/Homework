@@ -3,6 +3,8 @@ package com.xqbase.java.dict;
 import com.xqbase.java.list.DList;
 import com.xqbase.java.list.DListNode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -204,6 +206,20 @@ public class HashTable implements Dictionary {
             table[i].clear();
         }
         count = 0;
+    }
+
+    @Override
+    public Iterable<Object> keySet() {
+        List<Object> keys = new ArrayList<Object>();
+        return keys;
+    }
+
+    @Override
+    public boolean contains(Object key) {
+        int index = compFunction(key.hashCode());
+        // delegate this to the list find method
+        DListNode<Entry> node = table[index].find(newEntry(key, null));
+        return node == null;
     }
 
     /**
