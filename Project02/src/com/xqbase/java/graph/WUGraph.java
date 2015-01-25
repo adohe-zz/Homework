@@ -116,7 +116,26 @@ public class WUGraph {
      * Running time:  O(d), where d is the degree of "vertex".
      */
     public void removeVertex(Object vertex) {
+        if (!isVertex(vertex))
+            return;
 
+        Vertex v = (Vertex) vertexTable.find(vertex).value();
+        DList<Edge> edgeDList = v.edgeDList;
+        DListNode<Edge> head = edgeDList.front();
+        while (head != null) {
+            DListNode<Edge> nextEdge = head.next;
+            Edge edge = head.item;
+            if (edge.firstNode.equals(edge.secondNode)) {
+                edgeDList.remove(head);
+                edgeCount --;
+            } else {
+                edgeDList.remove(head);
+                edge.dest.edgeDList.remove(head);
+                edgeCount --;
+            }
+            head = nextEdge;
+        }
+        vertexCount --;
     }
 
     /**
