@@ -9,14 +9,14 @@ import com.xqbase.java.dict.Entry;
  *
  * @author Tony He
  */
-public class DList {
+public class DList<T> {
 
     /**
      *  head references the sentinel node.
      *  size is the number of items in the list.  (The sentinel node does not
      *       store an item.)
      */
-    protected DListNode head;
+    protected DListNode<T> head;
     protected int size;
 
     /* DList invariants:
@@ -35,12 +35,12 @@ public class DList {
      *  new DListNodes rather than calling the DListNode constructor directly.
      *  That way, only this method needs to be overridden if a subclass of DList
      *  wants to use a different kind of node.
-     *  @param entry the entry to store in the node.
+     *  @param t the item to store in the node.
      *  @param prev the node previous to this node.
      *  @param next the node following this node.
      */
-    protected DListNode newNode(Entry entry, DListNode prev, DListNode next) {
-        return new DListNode(entry, prev, next);
+    protected DListNode<T> newNode(T t, DListNode prev, DListNode next) {
+        return new DListNode<T>(t, prev, next);
     }
 
     /**
@@ -73,11 +73,11 @@ public class DList {
 
     /**
      *  insertFront() inserts an item at the front of this DList.
-     *  @param entry is the item to be inserted.
+     *  @param t is the item to be inserted.
      *  Performance:  runs in O(1) time.
      */
-    public void insertFront(Entry entry) {
-        DListNode newNode = newNode(entry, head, head.next);
+    public void insertFront(T t) {
+        DListNode<T> newNode = newNode(t, head, head.next);
         head.next.prev = newNode;
         head.next = newNode;
         size ++;
@@ -85,11 +85,11 @@ public class DList {
 
     /**
      *  insertBack() inserts an item at the back of this DList.
-     *  @param entry is the item to be inserted.
+     *  @param t is the item to be inserted.
      *  Performance:  runs in O(1) time.
      */
-    public void insertBack(Entry entry) {
-        DListNode newNode = newNode(entry, head.prev, head);
+    public void insertBack(T t) {
+        DListNode<T> newNode = newNode(t, head.prev, head);
         head.prev.next = newNode;
         head.prev = newNode;
         size++;
@@ -104,7 +104,7 @@ public class DList {
      *  @return the node at the front of this DList.
      *  Performance:  runs in O(1) time.
      */
-    public DListNode front() {
+    public DListNode<T> front() {
         if (isEmpty())
             return null;
 
@@ -120,7 +120,7 @@ public class DList {
      *  @return the node at the back of this DList.
      *  Performance:  runs in O(1) time.
      */
-    public DListNode back() {
+    public DListNode<T> back() {
         if (isEmpty())
             return null;
 
@@ -137,7 +137,7 @@ public class DList {
      *  @return the node following "node".
      *  Performance:  runs in O(1) time.
      */
-    public DListNode next(DListNode node) {
+    public DListNode<T> next(DListNode<T> node) {
         if (node == null || node.next == head)
             return null;
 
@@ -154,7 +154,7 @@ public class DList {
      *  @return the node prior to "node".
      *  Performance:  runs in O(1) time.
      */
-    public DListNode prev(DListNode node) {
+    public DListNode<T> prev(DListNode<T> node) {
         if (node == null || node.prev == head)
             return null;
 
@@ -164,15 +164,15 @@ public class DList {
     /**
      *  insertAfter() inserts an item in this DList immediately following "node".
      *  If "node" is null, do nothing.
-     *  @param entry the item to be inserted.
+     *  @param t the item to be inserted.
      *  @param node the node to insert the item after.
      *  Performance:  runs in O(1) time.
      */
-    public void insertAfter(Entry entry, DListNode node) {
+    public void insertAfter(T t, DListNode<T> node) {
         if (node == null)
             return;
 
-        DListNode newNode = newNode(entry, node, node.next);
+        DListNode<T> newNode = newNode(t, node, node.next);
         node.next.prev = newNode;
         node.next = newNode;
         size++;
@@ -181,15 +181,15 @@ public class DList {
     /**
      *  insertBefore() inserts an item in this DList immediately before "node".
      *  If "node" is null, do nothing.
-     *  @param entry the item to be inserted.
+     *  @param t the item to be inserted.
      *  @param node the node to insert the item before.
      *  Performance:  runs in O(1) time.
      */
-    public void insertBefore(Entry entry, DListNode node) {
+    public void insertBefore(T t, DListNode<T> node) {
         if (node == null)
             return;
 
-        DListNode newNode = newNode(entry, node.prev, node);
+        DListNode<T> newNode = newNode(t, node.prev, node);
         node.prev.next = newNode;
         node.prev = newNode;
         size++;
@@ -199,10 +199,10 @@ public class DList {
      * find() finds the specific entry from the list. If found return this
      * entry node, otherwise return null;
      */
-    public DListNode find(Entry entry) {
+    public DListNode<T> find(T entry) {
         DListNode head = front();
         while (head != null) {
-            if (head.entry.key().equals(entry.key()))
+            if (head.item.equals(entry))
                 return head;
             head = head.next;
         }
@@ -247,114 +247,9 @@ public class DList {
         String result = "[  ";
         DListNode current = head.next;
         while (current != head) {
-            result = result + current.entry.value().toString() + "  ";
+            result = result + current.item.toString() + "  ";
             current = current.next;
         }
         return result + "]";
-    }
-
-    public static void main(String[] args) {
-        DList l = new DList();
-        System.out.println("### TESTING insertFront ###\nEmpty list is " + l);
-
-        l.insertFront(new Entry(9, 9));
-        System.out.println("\nInserting 9 at front.\nList with 9 is " + l);
-        if (((Integer)l.head.next.entry.value()) != 9) {
-            System.out.println("head.next.item is wrong.");
-        }
-        if (((Integer)l.front().entry.value()) != 9) {
-            System.out.println("l.front().item is wrong.");
-        }
-        if (l.head.next.prev != l.head) {
-            System.out.println("head.next.prev is wrong.");
-        }
-        if (((Integer)l.head.prev.entry.value()) != 9) {
-            System.out.println("head.prev.item is wrong.");
-        }
-        if (l.head.prev.next != l.head) {
-            System.out.println("head.prev.next is wrong.");
-        }
-        if (l.size != 1) {
-            System.out.println("size is wrong.");
-        }
-
-        l.insertFront(new Entry(8, 8));
-        System.out.println("\nInserting 8 at front.\nList with 8 and 9 is " + l);
-        if (((Integer)l.head.next.entry.value()) != 8) {
-            System.out.println("head.next.item is wrong.");
-        }
-        if (((Integer)l.front().entry.value()) != 8) {
-            System.out.println("l.font().item is wrong.");
-        }
-        if (l.head.next.prev != l.head) {
-            System.out.println("head.next.prev is wrong.");
-        }
-        if (((Integer)l.head.prev.entry.value()) != 9) {
-            System.out.println("head.prev.item is wrong.");
-        }
-        if (l.head.prev.next != l.head) {
-            System.out.println("head.prev.next is wrong.");
-        }
-        if (l.head.next.next != l.head.prev) {
-            System.out.println("l.head.next.next != l.head.prev.");
-        }
-        if (l.head.prev.prev != l.head.next) {
-            System.out.println("l.head.prev.prev != l.head.next.");
-        }
-        if (l.size != 2) {
-            System.out.println("size is wrong.");
-        }
-
-
-
-        l.insertBack(new Entry(7, 7));
-        System.out.println("\nInserting 7 at back.\nList with 8, 9 and 7 is " + l);
-        if (((Integer)l.back().entry.value()) != 7) {
-            System.out.println("list.back().item is wrong");
-        }
-        if (l.size != 3) {
-            System.out.println("size is wrong.");
-        }
-
-        l.insertBefore(new Entry(6, 6), l.back());
-        System.out.println("\nInserting 6 before back node.\nList with 8, 9, 7 and 6 is " + l);
-        if (((Integer)l.back().prev.entry.value()) != 6) {
-            System.out.println("insertAfter() is wrong.");
-        }
-        if (l.size != 4) {
-            System.out.println("size is wrong.");
-        }
-
-        l.insertAfter(new Entry(5, 5), l.front());
-        System.out.println("\nInserting 5 after front node.\nList with 8, 9, 7, 6 and 5 is " + l);
-        if (((Integer)l.front().next.entry.value()) != 5) {
-            System.out.println("insertBefore() is wrong.");
-        }
-        if (l.size != 5) {
-            System.out.println("size is wrong.");
-        }
-
-        if (((Integer)l.prev(l.back()).entry.value()) != 6) {
-            System.out.println("prev() is wrong.");
-        }
-        if (((Integer)l.next(l.front()).entry.value()) != 5) {
-            System.out.println("next() is wrong.");
-        }
-
-        l.remove(l.back());
-        if (((Integer)l.back().entry.value()) == 7) {
-            System.out.println("remove() is wrong.");
-        }
-        if (l.size != 4) {
-            System.out.println("size is wrong.");
-        }
-
-        l.remove(l.front());
-        if (((Integer)l.front().entry.value()) != 5) {
-            System.out.println("remove() is wrong.");
-        }
-        if (l.size != 3) {
-            System.out.println("size is wrong.");
-        }
     }
 }

@@ -7,38 +7,37 @@ import com.xqbase.java.dict.Entry;
  *
  *  @author Tony He
  */
-public class DListNode {
+public class DListNode<T> {
 
     /**
      *  item references the item stored in the current node.
      *  prev references the previous node in the DList.
      *  next references the next node in the DList.
      *
-     *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATIONS.
      */
-    public Entry entry;
+    public T item;
     protected DListNode prev;
     protected DListNode next;
 
     /**
      * Construct a new DListNode instance
      *
-     * @param entry data value
+     * @param item data value
      */
-    public DListNode(Entry entry) {
-        this.entry = entry;
+    public DListNode(T item) {
+        this.item = item;
         this.prev = null;
         this.next = null;
     }
 
     /**
      *  DListNode() constructor.
-     *  @param e the entry to store in the node.
+     *  @param item the entry to store in the node.
      *  @param p the node previous to this node.
      *  @param n the node following this node.
      */
-    DListNode(Entry e, DListNode p, DListNode n) {
-        entry = e;
+    DListNode(T item, DListNode p, DListNode n) {
+        item = item;
         prev = p;
         next = n;
     }

@@ -21,7 +21,7 @@ public class HashTable implements Dictionary {
     /**
      * The has table data .
      */
-    private DList[] table;
+    private DList<Entry>[] table;
     /**
      * The total number of entries in the hash table.
      */
@@ -143,7 +143,7 @@ public class HashTable implements Dictionary {
     public Entry insert(Object key, Object value) {
         Entry entry = newEntry(key, value);
         int index = compFunction(key.hashCode());
-        DList bucket = table[index];
+        DList<Entry> bucket = table[index];
         if (!bucket.isEmpty())
             collisionCount++;
         bucket.insertFront(entry);
@@ -166,8 +166,8 @@ public class HashTable implements Dictionary {
     public Entry find(Object key) {
         int index = compFunction(key.hashCode());
         // delegate this to the list find method
-        DListNode node = table[index].find(newEntry(key, null));
-        return node == null ? null : node.entry;
+        DListNode<Entry> node = table[index].find(newEntry(key, null));
+        return node == null ? null : node.item;
     }
 
     /**
@@ -185,11 +185,11 @@ public class HashTable implements Dictionary {
 
     public Entry remove(Object key) {
         int index = compFunction(key.hashCode());
-        DListNode node = table[index].find(newEntry(key, null));
+        DListNode<Entry> node = table[index].find(newEntry(key, null));
         if (node != null) {
             table[index].remove(node);
             count--;
-            return node.entry;
+            return node.item;
         }
         return null;
     }
