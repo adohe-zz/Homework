@@ -83,7 +83,7 @@ public class WUGraph {
         int i = 0;
         while (head != null) {
             vertices[i] = head.item.element;
-            head = head.next;
+            head = vertexList.next(head);
             i++;
         }
         return vertices;
@@ -97,7 +97,7 @@ public class WUGraph {
      * Running time:  O(1).
      */
     public void addVertex(Object vertex) {
-        if (vertex == null)
+        if (vertex == null || vertexTable.contains(vertex))
             return;
 
         DList<Edge> edgeDList = new DList<Edge>();
