@@ -101,9 +101,10 @@ public class WUGraph {
             return;
 
         DList<Edge> edgeDList = new DList<Edge>();
-        Vertex v = new Vertex(vertex, edgeDList);
+        Vertex v = new Vertex(vertex, edgeDList, null);
         vertexTable.insert(vertex, v);
-        vertexList.insertFront(v);
+        DListNode<Vertex> node = vertexList.insertFront(v);
+        v.node = node;
         adjacencyList.insertFront(edgeDList);
         vertexCount++;
     }
@@ -136,6 +137,7 @@ public class WUGraph {
             head = nextEdge;
         }
         vertexTable.remove(vertex);
+        vertexList.remove(v.node);
         vertexCount--;
     }
 
@@ -297,10 +299,12 @@ public class WUGraph {
 
         private Object element;
         private DList<Edge> edgeDList;
+        private DListNode<Vertex> node;
 
-        public Vertex(Object element, DList<Edge> edgeDList) {
+        public Vertex(Object element, DList<Edge> edgeDList, DListNode<Vertex> node) {
             this.element = element;
             this.edgeDList = edgeDList;
+            this.node = node;
         }
     }
 
