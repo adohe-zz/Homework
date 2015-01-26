@@ -135,6 +135,7 @@ public class WUGraph {
             }
             head = nextEdge;
         }
+        vertexTable.remove(vertex);
         vertexCount--;
     }
 
