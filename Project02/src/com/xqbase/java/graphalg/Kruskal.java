@@ -6,8 +6,8 @@ package com.xqbase.java.graphalg;
 import com.xqbase.java.dict.HashTable;
 import com.xqbase.java.graph.Neighbors;
 import com.xqbase.java.graph.WUGraph;
-import com.xqbase.java.list.DList;
 import com.xqbase.java.queue.SortedListPriorityQueue;
+import com.xqbase.java.set.DisjointSets;
 
 import java.util.Comparator;
 
@@ -29,7 +29,8 @@ public class Kruskal {
         // First create a newly empty WUGraph instance
         WUGraph t = new WUGraph();
         // Add all the vertices of WUGraph g to the t
-        HashTable edgeTable = new HashTable();
+        HashTable edgeTable = new HashTable(g.edgeCount());
+        HashTable vertexTable = new HashTable(g.vertexCount());
         SortedListPriorityQueue<Integer, Edge> edgeQueue = new SortedListPriorityQueue<Integer, Edge>(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
@@ -37,32 +38,47 @@ public class Kruskal {
             }
         });
         Object[] vertices = g.getVertices();
+        int i = 0;
         for (Object vertex : vertices) {
             t.addVertex(vertex);
+            vertexTable.insert(vertex, i ++);
             Neighbors neighbors = g.getNeighbors(vertex);
             Object[] ns = neighbors.neighborList;
             for (Object n : ns) {
                 VertexPair key = new VertexPair(vertex, n);
                 if (!edgeTable.contains(key)) {
-                    Edge edge = new Edge(vertex, n);
+                    int weight = g.weight(vertex, n);
+                    Edge edge = new Edge(vertex, n, weight);
                     edgeTable.insert(key, edge);
                     edgeQueue.insert(g.weight(vertex, n), edge);
                 }
             }
         }
 
+        DisjointSets disjointSets = new DisjointSets(vertices.length);
+        while (!edgeQueue.isEmpty()) {
+            Edge edge = edgeQueue.removeMin().getValue();
+            int i1 = (Integer) vertexTable.find(edge.origin).value();
+            int i2 = (Integer) vertexTable.find(edge.dest).value();
+            if (disjointSets.find(i1) != disjointSets.find(i2)) {
+                t.addEdge(edge.origin, edge.dest, edge.weight);
+                disjointSets.union(i1, i2);
+            }
+        }
 
-        return null;
+        return t;
     }
 
     private static class Edge {
 
         private Object origin;
         private Object dest;
+        private int weight;
 
-        public Edge(Object origin, Object dest) {
+        public Edge(Object origin, Object dest, int weight) {
             this.origin = origin;
             this.dest = dest;
+            this.weight = weight;
         }
     }
 
