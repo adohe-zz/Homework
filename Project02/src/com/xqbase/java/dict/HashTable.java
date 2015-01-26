@@ -219,7 +219,7 @@ public class HashTable implements Dictionary {
         int index = compFunction(key.hashCode());
         // delegate this to the list find method
         DListNode<Entry> node = table[index].find(newEntry(key, null));
-        return node == null;
+        return node != null;
     }
 
     /**

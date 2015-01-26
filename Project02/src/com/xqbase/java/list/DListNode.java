@@ -3,17 +3,16 @@ package com.xqbase.java.list;
 import com.xqbase.java.dict.Entry;
 
 /**
- *  A DListNode is a node in a DList (doubly-linked list).
+ * A DListNode is a node in a DList (doubly-linked list).
  *
- *  @author Tony He
+ * @author Tony He
  */
 public class DListNode<T> {
 
     /**
-     *  item references the item stored in the current node.
-     *  prev references the previous node in the DList.
-     *  next references the next node in the DList.
-     *
+     * item references the item stored in the current node.
+     * prev references the previous node in the DList.
+     * next references the next node in the DList.
      */
     public T item;
     public DListNode prev;
@@ -31,10 +30,11 @@ public class DListNode<T> {
     }
 
     /**
-     *  DListNode() constructor.
-     *  @param t the entry to store in the node.
-     *  @param p the node previous to this node.
-     *  @param n the node following this node.
+     * DListNode() constructor.
+     *
+     * @param t the entry to store in the node.
+     * @param p the node previous to this node.
+     * @param n the node following this node.
      */
     DListNode(T t, DListNode p, DListNode n) {
         item = t;

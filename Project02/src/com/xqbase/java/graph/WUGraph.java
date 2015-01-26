@@ -84,7 +84,7 @@ public class WUGraph {
         while (head != null) {
             vertices[i] = head.item.element;
             head = head.next;
-            i ++;
+            i++;
         }
         return vertices;
     }
@@ -105,7 +105,7 @@ public class WUGraph {
         vertexTable.insert(vertex, v);
         vertexList.insertFront(v);
         adjacencyList.insertFront(edgeDList);
-        vertexCount ++;
+        vertexCount++;
     }
 
     /**
@@ -127,15 +127,15 @@ public class WUGraph {
             Edge edge = head.item;
             if (edge.firstNode.equals(edge.secondNode)) {
                 edgeDList.remove(head);
-                edgeCount --;
+                edgeCount--;
             } else {
                 edgeDList.remove(head);
                 edge.dest.edgeDList.remove(head);
-                edgeCount --;
+                edgeCount--;
             }
             head = nextEdge;
         }
-        vertexCount --;
+        vertexCount--;
     }
 
     /**
@@ -202,7 +202,7 @@ public class WUGraph {
                 neighborList[i] = edge.origin.element;
             }
             head = head.next;
-            i ++;
+            i++;
         }
         neighbors.neighborList = neighborList;
         neighbors.weightList = weightList;
@@ -231,7 +231,7 @@ public class WUGraph {
         edge.firstNode = firstNode;
         edge.secondNode = secondNode;
         edgeTable.insert(new VertexPair(u, v), edge);
-        edgeCount ++;
+        edgeCount++;
     }
 
     /**
@@ -253,7 +253,7 @@ public class WUGraph {
         uVertex.edgeDList.remove(edge.firstNode);
         Vertex vVertex = (Vertex) vertexTable.find(v).value();
         vVertex.edgeDList.remove(edge.secondNode);
-        edgeCount --;
+        edgeCount--;
     }
 
     /**

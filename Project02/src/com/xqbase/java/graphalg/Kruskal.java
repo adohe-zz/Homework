@@ -12,15 +12,15 @@ import com.xqbase.java.graph.WUGraph;
 
 public class Kruskal {
 
-  /**
-   * minSpanTree() returns a WUGraph that represents the minimum spanning tree
-   * of the WUGraph g.  The original WUGraph g is NOT changed.
-   *
-   * @param g The weighted, undirected graph whose MST we want to compute.
-   * @return A newly constructed WUGraph representing the MST of g.
-   */
-  public static WUGraph minSpanTree(WUGraph g) {
-      return null;
-  }
+    /**
+     * minSpanTree() returns a WUGraph that represents the minimum spanning tree
+     * of the WUGraph g.  The original WUGraph g is NOT changed.
+     *
+     * @param g The weighted, undirected graph whose MST we want to compute.
+     * @return A newly constructed WUGraph representing the MST of g.
+     */
+    public static WUGraph minSpanTree(WUGraph g) {
+        return null;
+    }
 
 }
