@@ -753,15 +753,13 @@ public class WUGTest {
 
         Object vertArray[] = new Object[VERTICES];
         for (i = 0; i < VERTICES; i++) {
-            vertArray[i] = new Nothing();
+            vertArray[i] = new Nothing(i);
         }
 
-        int score = 0;
-        edgeTest(vertArray);
-        /*int score = 14 - vertexTest(vertArray) - edgeTest(vertArray);
+        int score = 14 - vertexTest(vertArray) - edgeTest(vertArray);
         if (score < 0) {
           score = 0;
-        }*/
+        }
 
         System.out.println("Your WUGraph test score is " + (0.5 * (double) score) +
                 " out of 7.0.");
@@ -770,4 +768,10 @@ public class WUGTest {
 }
 
 class Nothing {
+
+    public int i;
+
+    public Nothing(int i) {
+        this.i = i;
+    }
 }
