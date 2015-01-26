@@ -757,7 +757,7 @@ public class WUGTest {
         }
 
         int score = 0;
-        vertexTest(vertArray);
+        edgeTest(vertArray);
         /*int score = 14 - vertexTest(vertArray) - edgeTest(vertArray);
         if (score < 0) {
           score = 0;

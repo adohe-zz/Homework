@@ -2,6 +2,7 @@
 
 package com.xqbase.java.graph;
 
+import com.xqbase.java.dict.Entry;
 import com.xqbase.java.dict.HashTable;
 import com.xqbase.java.list.DList;
 import com.xqbase.java.list.DListNode;
@@ -124,14 +125,16 @@ public class WUGraph {
         DList<Edge> edgeDList = v.edgeDList;
         DListNode<Edge> head = edgeDList.front();
         while (head != null) {
-            DListNode<Edge> nextEdge = head.next;
+            DListNode<Edge> nextEdge = edgeDList.next(head);
             Edge edge = head.item;
             if (edge.firstNode.equals(edge.secondNode)) {
                 edgeDList.remove(head);
+                edgeTable.remove(new VertexPair(vertex, vertex));
                 edgeCount--;
             } else {
                 edgeDList.remove(head);
                 edge.dest.edgeDList.remove(head);
+                edgeTable.remove(new VertexPair(vertex, edge.dest.element));
                 edgeCount--;
             }
             head = nextEdge;
@@ -204,7 +207,7 @@ public class WUGraph {
             } else {
                 neighborList[i] = edge.origin.element;
             }
-            head = head.next;
+            head = edgeDList.next(head);
             i++;
         }
         neighbors.neighborList = neighborList;
@@ -226,15 +229,29 @@ public class WUGraph {
         if (!isVertex(u) || !isVertex(v))
             return;
 
-        Vertex uVertex = (Vertex) vertexTable.find(u).value();
-        Vertex vVertex = (Vertex) vertexTable.find(v).value();
-        Edge edge = new Edge(weight, uVertex, vVertex, null, null);
-        DListNode<Edge> firstNode = uVertex.edgeDList.insertFront(edge);
-        DListNode<Edge> secondNode = vVertex.edgeDList.insertFront(edge);
-        edge.firstNode = firstNode;
-        edge.secondNode = secondNode;
-        edgeTable.insert(new VertexPair(u, v), edge);
-        edgeCount++;
+        Edge edge;
+        Entry entry = edgeTable.find(new VertexPair(u, v));
+        if (entry != null) {
+            edge = (Edge) entry.value();
+            edge.weight = weight;
+        } else {
+            Vertex uVertex = (Vertex) vertexTable.find(u).value();
+            Vertex vVertex = (Vertex) vertexTable.find(v).value();
+            edge = new Edge(weight, uVertex, vVertex, null, null);
+            if (uVertex.equals(vVertex)) {
+                DListNode<Edge> firstNode = uVertex.edgeDList.insertFront(edge);
+                edge.firstNode = firstNode;
+                edge.secondNode = firstNode;
+            } else {
+                DListNode<Edge> firstNode = uVertex.edgeDList.insertFront(edge);
+                DListNode<Edge> secondNode = vVertex.edgeDList.insertFront(edge);
+                edge.firstNode = firstNode;
+                edge.secondNode = secondNode;
+            }
+            edgeTable.insert(new VertexPair(u, v), edge);
+            edgeCount++;
+        }
+
     }
 
     /**
@@ -251,11 +268,13 @@ public class WUGraph {
         if (!isEdge(u, v))
             return;
 
-        Edge edge = (Edge) edgeTable.find(new VertexPair(u, v)).value();
+        VertexPair key = new VertexPair(u, v);
+        Edge edge = (Edge) edgeTable.find(key).value();
         Vertex uVertex = (Vertex) vertexTable.find(u).value();
         uVertex.edgeDList.remove(edge.firstNode);
         Vertex vVertex = (Vertex) vertexTable.find(v).value();
         vVertex.edgeDList.remove(edge.secondNode);
+        edgeTable.remove(key);
         edgeCount--;
     }
 

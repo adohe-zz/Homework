@@ -210,7 +210,7 @@ public class DList<T> {
         while (head != null) {
             if (head.item.equals(entry))
                 return head;
-            head = head.next;
+            head = this.next(head);
         }
 
         return null;

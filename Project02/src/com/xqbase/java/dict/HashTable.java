@@ -218,7 +218,12 @@ public class HashTable implements Dictionary {
     public boolean contains(Object key) {
         int index = compFunction(key.hashCode());
         // delegate this to the list find method
-        DListNode<Entry> node = table[index].find(newEntry(key, null));
+        DListNode<Entry> node = null;
+        DList<Entry> list = table[index];
+        if (list != null) {
+            node = list.find(newEntry(key, null));
+        }
+
         return node != null;
     }
 
