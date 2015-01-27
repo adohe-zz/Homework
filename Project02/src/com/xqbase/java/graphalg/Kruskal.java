@@ -56,16 +56,13 @@ public class Kruskal {
         }
 
         DisjointSets disjointSets = new DisjointSets(vertices.length);
-        int numFoundEdges = 0;
-        int vertexCount = vertices.length;
-        while (numFoundEdges < vertexCount - 1 && !edgeQueue.isEmpty()) {
+        while (!edgeQueue.isEmpty()) {
             Edge edge = edgeQueue.removeMin().getValue();
             int i1 = (Integer) vertexTable.find(edge.origin).value();
             int i2 = (Integer) vertexTable.find(edge.dest).value();
             if (disjointSets.find(i1) != disjointSets.find(i2)) {
                 t.addEdge(edge.origin, edge.dest, edge.weight);
-                disjointSets.union(i1, i2);
-                ++ numFoundEdges;
+                disjointSets.union(disjointSets.find(i1), disjointSets.find(i2));
             }
         }
 
